@@ -18,10 +18,7 @@ import './permission' // permission control
 // import './mock' // simulation data generator
 
 import * as filters from './filters' // global filter
-<<<<<<< HEAD
 import Cookies from 'js-cookie'
-=======
->>>>>>> 0f3c8fb89d57b9a5a1fbfa94208ac46c99b4b106
 
 Vue.use(Element)
 
@@ -41,13 +38,10 @@ if (process.env.BASE_API === 'https://api-managertest.wajiwaji.net') {
 
 Vue.config.productionTip = false
 
-<<<<<<< HEAD
 Vue.prototype.getUserId = function() {
   return Cookies.get('id') || ''
 }
 
-=======
->>>>>>> 0f3c8fb89d57b9a5a1fbfa94208ac46c99b4b106
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
