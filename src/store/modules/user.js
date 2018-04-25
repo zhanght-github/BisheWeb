@@ -2,22 +2,23 @@ import { login } from '@/api/login'
 import {
   setRoles,
   getRoles,
-  setName,
-  getName,
+  setId,
+  getId,
   getSource,
-  setSource
+  removeRoles,
+  removeId
 } from '@/utils/auth'
 
 const user = {
   state: {
-    name: getName(),
+    id: getId(),
     roles: getRoles(),
     source: getSource()
   },
 
   mutations: {
-    SET_NAME: (state, name) => {
-      state.name = name
+    SET_ID: (state, id) => {
+      state.id = id
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
@@ -34,22 +35,25 @@ const user = {
       return new Promise((resolve, reject) => {
         login(username, userInfo.password)
           .then(response => {
-            const result = response.data.result
+            const result = response.data.data
+            console.log(result)
             let roles
-            switch (result.roleId) {
+            switch (result.role) {
               case 0:
-                roles = ['admin']
+                roles = ['student']
+                break
+              case 1:
+                roles = ['teacher']
                 break
               default:
-                roles = ['other']
+                roles = ['manager']
                 break
             }
             commit('SET_ROLES', roles)
-            commit('SET_NAME', result.id)
-            commit('SET_SOURCE', result.source)
+            commit('SET_ID', result.userid)
             setRoles(roles)
-            setName(result.id)
-            setSource(result.source)
+            console.log(result.userid)
+            setId(result.userid)
             dispatch('GenerateRoutes', { roles }).then(() => {
               resolve()
             })
@@ -60,45 +64,11 @@ const user = {
       })
     },
 
-    // 获取用户信息
-    // GetUserInfo({ commit, state }) {
-    //   return new Promise((resolve, reject) => {
-    //     getUserInfo(state.token)
-    //       .then(response => {
-    //         if (!response.data) {
-    //           // 由于mockjs 不支持自定义状态码只能这样hack
-    //           reject('error')
-    //         }
-    //         const data = response.data
-    //         commit('SET_ROLES', data.role)
-    //         commit('SET_NAME', data.name)
-    //         commit('SET_AVATAR', data.avatar)
-    //         commit('SET_INTRODUCTION', data.introduction)
-    //         resolve(response)
-    //       })
-    //       .catch(error => {
-    //         reject(error)
-    //       })
-    //   })
-    // },
-
-    // 第三方验证登录
-    // LoginByThirdparty({ commit, state }, code) {
-    //   return new Promise((resolve, reject) => {
-    //     commit('SET_CODE', code)
-    //     loginByThirdparty(state.status, state.email, state.code).then(response => {
-    //       commit('SET_TOKEN', response.data.token)
-    //       setToken(response.data.token)
-    //       resolve()
-    //     }).catch(error => {
-    //       reject(error)
-    //     })
-    //   })
-    // },
-
     // 登出
     LogOut({ commit }) {
       return new Promise(resolve => {
+        removeRoles()
+        removeId()
         resolve()
       })
     },

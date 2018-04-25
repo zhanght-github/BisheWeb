@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function login(adminId, adminPwd) {
+export function login(userid, password) {
   return request({
-    url: `/login?phone=${adminId}&password=${adminPwd}`,
-    method: 'post'
+    url: `/user/login?userid=${userid}&password=${password}`,
+    method: 'get'
   })
 }

@@ -2,17 +2,19 @@
   <el-menu class="navbar">
     <div class="header flex">
         <div class="logo flex">
-          <svg-icon icon-class="logo"/>
           <div>
-            公众号粉丝维护平台
+            毕业设计管理系统
           </div>
         </div>
       <div class="headerright flex">
+        <div class="welcome">
+          欢迎
+        </div>
         <div class="userinfo flex">
-          <span>{{userinfo.phone}}</span>
+          <span>{{userinfo.username}}</span>
         </div>
         <div class="price">
-          单价: {{userinfo.perPrice/100}}元/粉
+          {{userinfo.role}}
         </div>
         <div class="exit" @click="logout()">
           <i class="iconfont icon-ico_sign_out"></i>
@@ -29,7 +31,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import ErrorLog from '@/components/ErrorLog'
-import { getuserinfo } from '@/api/index'
+import { getUserInfo } from '@/api'
 
 export default {
   data() {
@@ -39,9 +41,8 @@ export default {
       messagelist: [],
       showmessage: false,
       userinfo: {
-        phone: '',
-        name: '',
-        perPrice: ''
+        username: '',
+        role: ''
       }
     }
   },
@@ -60,9 +61,9 @@ export default {
   },
   methods: {
     getUser() {
-      getuserinfo().then(res => {
-        this.userinfo = res.data.result
-        console.log(this.userinfo)
+      getUserInfo(this.getUserId()).then(res => {
+        this.userinfo = res.data.data
+        this.userinfo.role = this.userinfo.role === 0 ? '同学' : this.userinfo.role === 1 ? '教师' : '管理'
       })
     },
     toggleSideBar() {
@@ -94,7 +95,7 @@ export default {
   position: fixed;
   top: 0;
   right: 0;
-  left: 0px;
+  left: 240px;
   justify-content: space-between;
   height: 50px;
   align-items: center;
@@ -117,19 +118,22 @@ export default {
         cursor: pointer;
       }
     }
+    .welcome {
+      font-size: 12px;
+    }
     .price {
       margin-right: 21.5px;
-      padding: 0 8px;
+      padding: 0;
       height: 28px;
       border-radius: 4px;
-      background-color: #312755;
+      background-color: #fff;
       line-height: 28px;
       text-align: center;
       font-size: 12px;
     }
     .userinfo {
-      margin-right: 20px;
       align-items: center;
+      margin: 0 5px;
       img {
         width: 32px;
         height: 32px;

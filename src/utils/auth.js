@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 
 const RolesKey = 'roles'
-const NameKey = 'name'
+const IdKey = 'id'
 const SourceKey = 'source'
 
 export function getRoles() {
@@ -30,20 +30,20 @@ export function removeRoles() {
   return Cookies.remove(RolesKey)
 }
 
-export function getName() {
-  return Cookies.get(NameKey) || ''
+export function getId() {
+  return Cookies.get(IdKey) || ''
 }
 
-export function setName(name) {
-  if (name) {
-    return Cookies.set(NameKey, name)
+export function setId(id) {
+  if (id) {
+    return Cookies.set(IdKey, id)
   } else {
     return false
   }
 }
 
-export function removeName() {
-  return Cookies.remove(NameKey)
+export function removeId() {
+  return Cookies.remove(IdKey)
 }
 
 export function getSource() {

@@ -1,6 +1,6 @@
-# wajiwaji-bms
 
-> 微信公众号管理系统
+
+> 毕业设计管理平台
 
 ## Build Setup
 

@@ -5,20 +5,12 @@
     transition: margin-left 0.28s;
     margin-left: 240px;
   } // 侧边栏
-  .scroll-wrapper{
-    .el-menu{
-      background-color: $menuBg !important;
-    }
-    .el-menu-item{
-      background-color: $menuBg!important;
-    }
-  }
   .sidebar-container {
     transition: width 0.28s;
     width: 240px!important;
     height: 100%;
     position: fixed;
-    top: 50px;
+    top: 0;
     bottom: 0;
     left: 0;
     z-index: 1001;
@@ -34,7 +26,7 @@
       }
       .chanyikeji{
         font-weight: 600;
-        color: #fff;
+        color: #b8b9c7;
       }
     }
     .el-submenu{
@@ -42,14 +34,13 @@
       .el-submenu__title{
         &:hover{
           border-radius: 4px;
-          background-color: $menuBg !important;
+          background-color: rgba(122, 123, 145, 0.08) !important;
         }
-        background-color: $menuBg !important;
         span{
           font-family: CerebriSans-SemiBold;
           font-size: 13px;
           font-weight: 600;
-          color: #fff;
+          color: #7a7b91;
         }
       }
       .el-menu{
@@ -60,26 +51,26 @@
           margin: 0;
           &:hover{
             border-radius: 4px;
-            background-color: $menuBg !important;
+            background-color: rgba(122, 123, 145, 0.08) !important;
           }
           span{
             font-family: CerebriSans-SemiBold;
             font-size: 13px;
             font-weight: 600;
-            color: #fff;
+            color: #7a7b91;
           }
           svg{
-            use{fill:#fff  !important}
+            use{fill:#7a7b91  !important}
           }
         }
         .is-active{
           border-radius: 4px;
-          background-color: $menuBg !important;
+          background-color: rgba(122, 123, 145, 0.08) !important;
           span{
-            color: $fontblue !important;
+            color: #7a7b91;
           }
           svg{
-            use{fill:#fff !important;}
+            use{fill:#7a7b91 !important;}
           }
         }
       }
@@ -92,19 +83,16 @@
           font-family: CerebriSans-SemiBold;
           font-size: 13px;
           font-weight: 600;
-          color: #fff;
+          color: #7a7b91;
         }
         &:hover{
           border-radius: 3px;
-          background-color:$menuBg !important;
+          background-color:rgba(122, 123, 145, 0.08) !important;
         }
       }
       .is-active{
         border-radius: 3px;
-        background-color: $menuBg !important;
-        span{
-          color: $fontblue;
-        }
+        background-color: rgba(122, 123, 145, 0.08) !important;
       }
     }
     .svg-icon {

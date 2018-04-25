@@ -14,15 +14,14 @@
   background-color: #595a69;
 }
 body {
-  background-color: #130a2f;
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-family:PingFang SC, sans-serif;
+  font-family: CerebriSans-SemiBold, -apple-system, PingFang SC, sans-serif;
   font-size:13px;
   font-weight: 600;
-  color: #fff;
+  color: $fontcolor;
 }
 
 label {
@@ -30,9 +29,9 @@ label {
 }
 
 html {
-  line-height: none;
   height: 100%;
   box-sizing: border-box;
+  // line-height: 1;
 }
 
 #app{
@@ -252,7 +251,7 @@ code {
 
 .app-main{
    padding: 10px;
-  padding-top: 50px;
+  padding-top: 60px;
 }
 .allheader{
   box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.04);
@@ -277,13 +276,6 @@ ul{
   -webkit-line-clamp:2;
 }
 
-.navbar{
-  .header{
-    background-color: $bgcolor;
-    z-index: 100;
-  }
-}
-
 // 下划线查看样式
 .watchinfo {
   text-decoration: underline;
@@ -291,6 +283,18 @@ ul{
   &:hover {
     cursor: pointer;
     color: #4f505e;
+  }
+}
+
+// 4px圆角
+.bor4{
+  border-radius: 4px;
+}
+
+// hover
+.pointer{
+  &:hover{
+    cursor: pointer;
   }
 }
 
