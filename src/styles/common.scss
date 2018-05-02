@@ -1,0 +1,131 @@
+
+/*common style*/
+.enquire-block{
+  display: inline-block;
+  vertical-align: top;
+  width:100%;
+  height:auto;
+  box-sizing:border-box;
+  padding:10px 25px 5px 25px;
+  background-color:#f2f2f2;
+  .enquire-item{
+    display: inline-block;
+    vertical-align: top;
+    width:auto;
+    height:auto;
+    margin-right:25px;
+    margin-bottom:5px;
+    .enquire-title{
+      display: inline-block;
+      vertical-align: top;
+      min-width:4em;
+      height:100%;
+      line-height:36px;
+      color:#666;
+      font-size:14px;
+      margin-right:10px;
+      .enquire-input{
+        display: inline-block;
+        vertical-align: top;
+        width:200px;
+        height:100%;
+      }
+    }
+  }
+  .enquire-action{
+    display: inline-block;
+    vertical-align: top;
+    width:auto;
+    height:auto;
+    margin-bottom:5px;
+  }
+}
+.detail-row{
+  display: inline-block;
+  vertical-align: top;
+  width:100%;
+  font-size:0;
+  margin-bottom:35px;
+  .row-title{
+    display: inline-block;
+    vertical-align: top;
+    width:8em;
+    text-align:right;
+    margin-right:15px;
+    font-size:14px;
+    color:#333;
+    box-sizing:border-box;
+    padding-top:13px;
+  }
+  .row-content{
+    display: inline-block;
+    vertical-align: top;
+    width:auto;
+    height:auto;
+    .choice-wrapper{
+      display: inline-block;
+      vertical-align: top;
+      width:250px;
+      height:36px;
+      margin-right:25px;
+    }
+    .input-wrapper{
+      display: inline-block;
+      vertical-align: top;
+      width:250px;
+      height:36px;
+      margin-right:45px;
+    }
+    .textarea-wrapper{
+      display: inline-block;
+      vertical-align: top;
+      width:672px;
+    }
+    .picture-list{
+      display: inline-block;
+      vertical-align: top;
+      width:100%;
+      height:120px;
+      .picture-item{
+        display: inline-block;
+        vertical-align: top;
+        width:120px;
+        height:120px;
+        overflow:hidden;
+        box-sizing:border-box;
+        border:1px solid #e1e1e1;
+        margin-right:25px;
+        cursor:pointer;
+      }
+    }
+    .remind{
+      width:100%;
+      height:auto;
+      font-size:14px;
+      color:#3a8ee6;
+      margin-top:15px;
+    }
+  }
+}
+
+.tableWrapper{
+  width:100%;
+  height:auto;
+  box-sizing:border-box;
+  padding:7px 25px 0 0;
+}
+
+.el-pagination{
+  margin-top:20px;
+}
+.el-select{
+  width:100%
+}
+
+
+
+
+
+
+
+

@@ -155,8 +155,8 @@ export default {
   // border-bottom-left-radius: 4px;
   // border-bottom-right-radius: 4px;
   ul {
-    align-items: center;
-    li {
+      align-items: center;
+      li {
       width: 30px;
       height: 30px;
       object-fit: contain;
