@@ -63,13 +63,13 @@ export const asyncRouterMap = [
         path: '/teacher/topic',
         component: _import('Teacher/Topic/Index'),
         name: 'topic',
-        meta: { title: '课题管理', icon: 'ico_game', role: ['teacher'] },
+        meta: { title: '课题管理', icon: 'icon-ico_goodie', role: ['teacher'] },
         children: [
           {
             path: '',
             component: _import('Teacher/Topic/Index'),
             name: 'topic',
-            meta: { title: '课题管理', icon: 'ico_game', noCache: true, role: ['teacher'] }
+            meta: { title: '课题管理', icon: 'icon-ico_goodie', noCache: true, role: ['teacher'] }
           }
         ]
       }

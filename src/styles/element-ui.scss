@@ -785,3 +785,37 @@ z-index: 3000 !important;
    }
  }
 }
+
+//handleBTN
+.editBTN{
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 134px;
+  height: 40px;
+  font-size: 12px;
+  border: none;
+  color: #4780fc;
+  transition: 0.2s ease;
+  &:hover {
+    color: #fff;
+    background-color: #4780fc;
+  }
+}
+.delBTN{
+  margin-left: 0px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  display: flex;
+  justify-content: space-around;
+  i {
+    color: #f93b6e !important;
+  }
+  transition: 0.2s ease;
+  &:hover {
+    i {
+      color: #fff !important;
+    }
+    background-color: #f93b6e;
+  }
+}

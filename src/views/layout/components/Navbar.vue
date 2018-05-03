@@ -92,6 +92,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .header {
+  background-color: #ffffff;
   position: fixed;
   top: 0;
   right: 0;

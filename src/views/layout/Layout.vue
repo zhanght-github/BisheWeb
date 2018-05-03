@@ -33,5 +33,6 @@ export default {
   position: relative;
   min-height: 100%;
   width: 100%;
+  background-color: #eaedf3;
 }
 </style>

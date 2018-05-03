@@ -42,8 +42,8 @@ export default {
       pageCount: 0,
       options: [
         {
-          value: 20,
-          label: '20条/页'
+          value: 10,
+          label: '10条/页'
         },
         {
           value: 50,
@@ -145,17 +145,19 @@ export default {
 .paging {
   z-index: 20;
   justify-content: space-between;
-  // position: fixed;
-  // bottom: 0;
-  // left: 240px;
-  // right: 0;
+  position: fixed;
+  bottom: 0;
+  left: 240px;
+  right: 0;
   height: 60px;
   line-height: 60px;
-  background: #130a2f;
-  // border-bottom-left-radius: 4px;
-  // border-bottom-right-radius: 4px;
+  background: white;
+  border-top: 1px solid rgba(242, 242, 242, 0.8);
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
   ul {
     align-items: center;
+    flex: none;
     li {
       width: 30px;
       height: 30px;
@@ -165,7 +167,7 @@ export default {
       text-align: center;
       line-height: 30px;
       margin-right: 10px;
-      color: #fff;
+      color: #7a7b91;
       font-family: CerebriSans-SemiBold;
       font-size: 13px;
       font-weight: 600;
@@ -176,7 +178,7 @@ export default {
       }
     }
     .notallow {
-      color: #fff;
+      color: #b8b9c7;
       &:hover {
         cursor: not-allowed;
         background-color: rgba(122, 123, 145, 0.08);
@@ -192,16 +194,21 @@ export default {
     }
   }
   .total {
+    flex: none;
     margin-left: 30px;
     font-family: CerebriSans-SemiBold;
     font-size: 13px;
     font-weight: 500;
-    color: #fff;
+    color: #b8b9c7;
     width: 200px;
+    span {
+      margin-right: 10px;
+    }
   }
   .right {
     margin-right: 30px;
-    color: #fff;
+    flex: none;
+    color: #b8b9c7;
     .selectDown {
       width: 88px;
       height: 30px;
@@ -219,7 +226,7 @@ export default {
         font-family: CerebriSans-SemiBold;
         font-size: 12px;
         font-weight: 600;
-        color: #fff;
+        color: #7a7b91;
         transition: background-color 0.2s ease;
         &:hover {
           background-color: rgba(122, 123, 145, 0.14);
@@ -233,16 +240,13 @@ export default {
   }
 }
 </style>
-<style rel="stylesheet/scss" lang="scss">
+<style>
 .paging .pageS .el-input {
   width: 88px;
   height: 30px;
 }
 .paging .selectDown {
   margin-right: 22px;
-  .el-input__inner {
-    height: 30px !important;
-  }
 }
 .paging .pageS .el-input input {
   width: 88px;
@@ -250,6 +254,6 @@ export default {
   font-family: CerebriSans-SemiBold;
   font-size: 12px;
   font-weight: 600;
-  color: #fff;
+  color: #7a7b91;
 }
 </style>

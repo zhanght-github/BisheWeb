@@ -30,18 +30,33 @@ Object.keys(filters).forEach(key => {
 global.success = 200
 global.fail = 40001
 
-if (process.env.BASE_API === 'https://api-managertest.wajiwaji.net') {
-  global.backURL = encodeURIComponent('https://wms-t.wajiwaji.net/manage/')
-} else {
-  global.backURL = encodeURIComponent('https://wms.wajiwaji.net/manage/')
-}
-
 Vue.config.productionTip = false
 
 Vue.prototype.getUserId = function() {
   return Cookies.get('id') || ''
 }
 
+/**
+ * 获取当前时间24小时制
+ * yyyy-MM-dd HH:mm:ss
+ */
+Vue.prototype.get24Hours = function() {
+  var date = new Date()
+  var seperator1 = '-'
+  var seperator2 = ':'
+  var month = date.getMonth() + 1
+  var strDate = date.getDate()
+  if (month >= 1 && month <= 9) {
+    month = `0${month}`
+  }
+  if (strDate >= 0 && strDate <= 9) {
+    strDate = `0${strDate}`
+  }
+  var currentdate = `${date.getFullYear() + seperator1 + month + seperator1 + strDate
+  } ${date.getHours()}${seperator2}${date.getMinutes()
+  }${seperator2}${date.getSeconds()}`
+  return currentdate
+}
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
