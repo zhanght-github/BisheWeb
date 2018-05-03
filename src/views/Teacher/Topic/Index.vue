@@ -36,7 +36,7 @@
             已选人数: &nbsp;<span>{{item.alreadynum}}</span>/<span>{{item.supplynum}}</span>
           </div>
           <div class="topicinfo collage flex">{{item.collegename}}</div>
-          <div class="topicinfo watchinfo flex">
+          <div class="topicinfo watchinfo flex" @click="openInfo(item)">
             查看详情
           </div>
           <div class="handle flex">
@@ -95,12 +95,12 @@
         <div class="infobox flex">
           <div class="twoselect">
             <div class="label">学院名称</div>
-            <el-select v-model="topicdata.collegeid" @change="getMajor" class="selectDown">
+            <el-select v-model="college" @change="getMajor" class="selectDown">
               <el-option
                 v-for="(item,index) in collegeList"
                 :key="index"
                 :label="item.collegename"
-                :value="item.collegeid">
+                :value="item">
               </el-option>
             </el-select>
           </div>
@@ -135,6 +135,60 @@
         <el-button type="info" class="cancelbtn" plain @click="closeDialog()">取消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog class='editdia topicInfoDia' :title='selectdata?selectdata.topicname:""' width="600px" :visible.sync="topicInfoDialog" :close-on-press-escape='false' :close-on-click-modal='false'>
+      <div class="diabody diascroll">
+        <div class="topicInfoBox flex">
+          <div class="label">专业班级:</div>
+          <div class="info">
+            {{selectdata.collegename}}&nbsp;&nbsp;{{selectdata.major}}
+          </div>
+        </div>
+        <div class="topicInfoBox flex">
+          <div class="label">课题人数:</div>
+          <div class="info">
+            {{selectdata.supplynum}}
+          </div>
+        </div>
+        <div class="topicInfoBox flex">
+          <div class="label">结合实际:</div>
+          <div class="info">
+            <div v-if='selectdata.shiji===1'>是</div>
+            <div v-if='selectdata.shiji===0'>否</div>
+          </div>
+        </div>
+        <div class="topicInfoBox flex">
+          <div class="label">课题来源:</div>
+          <div class="info">
+            {{selectdata.topicsource}}
+          </div>
+        </div>
+        <div class="topicInfoBox flex">
+          <div class="label">课题类型:</div>
+          <div class="info">
+            {{selectdata.topictype}}
+          </div>
+        </div>
+        <div class="topicInfoBox flex">
+          <div class="label">课题内容:</div>
+          <div class="info" v-html='selectdata.topiccontent'>
+          </div>
+        </div>
+        <div class="topicInfoBox flex">
+          <div class="label">目标要求:</div>
+          <div class="info" v-html='selectdata.target'>
+          </div>
+        </div>
+        <div class="topicInfoBox flex">
+          <div class="label">进度安排:</div>
+          <div class="info" v-html='selectdata.schedule'>
+          </div>
+        </div>
+      </div>
+      <div class="diafoot flex">
+        <el-button  type="primary" class="truebutton deepbluebtn"  @click="closeInfo()">好的</el-button>
+      </div>
+    </el-dialog>
     <Pagging :total='total' :PageNum='pageNum' :pageSize='pageSize' @handlePageSize='handlePageSize' @handlePageNum='handlePageNum'></Pagging>
   </div>
 </template>
@@ -142,7 +196,7 @@
 <script>
 import Addcomponents from '../../common/Addcomponents'
 import Pagging from '../../common/Pagging'
-import { getTopicList, addTopic } from '@/api/teacher'
+import { getTopicList, addTopic, deleteTopic, updateTopic } from '@/api/teacher'
 import { getCollege, getMajor } from '@/api/index'
 export default {
   data() {
@@ -173,14 +227,17 @@ export default {
       isAdd: false,
       canClick: false,
       topicDialog: false,
+      college: null,
       topicdata: {
         teacherid: this.getUserId(),
+        teachername: this.getUsers().username,
+        teacherphone: this.getUsers().userphone,
         topicname: null,
         topictype: null,
         topicsource: null,
         shiji: 1,
         collegeid: null,
-        collegename: '信息工程学院',
+        collegename: null,
         major: null,
         supplynum: null,
         alreadynum: 0,
@@ -190,7 +247,24 @@ export default {
         createtime: null
       },
       collegeList: [],
-      majorList: []
+      majorList: [],
+      topicInfoDialog: false,
+      selectdata: {
+        teacherid: null,
+        topicname: null,
+        topictype: null,
+        topicsource: null,
+        shiji: null,
+        collegeid: null,
+        collegename: null,
+        major: null,
+        supplynum: null,
+        alreadynum: null,
+        topiccontent: null,
+        target: null,
+        schedule: null,
+        createtime: null
+      }
     }
   },
   components: { Addcomponents, Pagging },
@@ -222,7 +296,9 @@ export default {
       })
     },
     getMajor(val) {
-      getMajor(val).then(res => {
+      this.topicdata.collegeid = val.collegeid
+      this.topicdata.collegename = val.collegename
+      getMajor(val.collegeid).then(res => {
         this.majorList = res.data.data
       })
     },
@@ -232,13 +308,49 @@ export default {
       } else {
         $event.target.parentNode.blur()
       }
+      this.isEdit = true
+      this.topicDialog = true
+      this.topicdata = val
+      this.college = {
+        collegeid: val.collegeid,
+        collegename: val.collegename
+      }
+      getMajor(val.collegeid).then(res => {
+        this.majorList = res.data.data
+      })
+      this.topicdata.topiccontent = this.topicdata.topiccontent.replace(/<br>/g, '\n')
+      this.topicdata.target = this.topicdata.target.replace(/<br>/g, '\n')
+      this.topicdata.schedule = this.topicdata.schedule.replace(/<br>/g, '\n')
     },
+
     deleteTopic(val, $event) {
       if ($event.target.nodeName === 'BUTTON') {
         $event.target.blur()
       } else {
         $event.target.parentNode.blur()
       }
+      this.$confirm(`确定要删除课题「${val.topicname}」吗?`, '确定删除？', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          deleteTopic(val.topicid).then(res => {
+            if (res.data.status === 'OK') {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              })
+              this.getData()
+            }
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     handleAdd() {
       this.isAdd = true
@@ -272,14 +384,17 @@ export default {
       this.reset()
     },
     reset() {
+      this.college = null
       this.topicdata = {
         teacherid: this.getUserId(),
+        teachername: this.getUsers().username,
+        teacherphone: this.getUsers().userphone,
         topicname: null,
         topictype: null,
         topicsource: null,
         shiji: 1,
         collegeid: null,
-        collegename: '信息工程学院',
+        collegename: null,
         major: null,
         supplynum: null,
         alreadynum: 0,
@@ -292,10 +407,21 @@ export default {
       this.isEdit = false
       this.topicDialog = false
       this.canClick = false
+      this.majorList = []
     },
     editbtn() {
       this.canClick = false
       this.checkPrice()
+      if (this.canClick) {
+        this.topicdata.topiccontent = this.topicdata.topiccontent.replace(/\n/g, '<br>')
+        this.topicdata.target = this.topicdata.target.replace(/\n/g, '<br>')
+        this.topicdata.schedule = this.topicdata.schedule.replace(/\n/g, '<br>')
+        this.topicdata.createtime = this.get24Hours()
+        updateTopic(this.topicdata).then(res => {
+          this.reset()
+          this.getData()
+        })
+      }
     },
     addbtn() {
       this.canClick = false
@@ -310,6 +436,29 @@ export default {
           this.getData()
         })
       }
+    },
+    closeInfo() {
+      this.topicInfoDialog = false
+      this.selectdata = {
+        teacherid: null,
+        topicname: null,
+        topictype: null,
+        topicsource: null,
+        shiji: null,
+        collegeid: null,
+        collegename: null,
+        major: null,
+        supplynum: null,
+        alreadynum: null,
+        topiccontent: null,
+        target: null,
+        schedule: null,
+        createtime: null
+      }
+    },
+    openInfo(val) {
+      this.topicInfoDialog = true
+      this.selectdata = val
     }
   }
 }
@@ -382,6 +531,7 @@ export default {
 }
 </style>
 <style rel="stylesheet/scss" lang="scss">
+@import 'src/styles/variables.scss';
 .topicList {
   .topiccontent {
     align-items: flex-start !important;
@@ -390,7 +540,7 @@ export default {
   .topicDia {
     .diabody {
       padding: 12px 24px;
-      height: 550px;
+      height: 450px;
     }
     .infobox {
       margin-bottom: 12px;
@@ -417,6 +567,22 @@ export default {
           height: 110px;
           resize: none;
         }
+      }
+    }
+  }
+  .topicInfoDia {
+    .diabody {
+      height: 450px;
+    }
+    .topicInfoBox {
+      padding: 12px 24px;
+      .label {
+        font-size: 13px;
+        margin-right: 10px;
+      }
+      .info {
+        color: $menuHover;
+        font-size: 13px;
       }
     }
   }

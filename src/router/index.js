@@ -72,6 +72,34 @@ export const asyncRouterMap = [
             meta: { title: '课题管理', icon: 'icon-ico_goodie', noCache: true, role: ['teacher'] }
           }
         ]
+      },
+      {
+        path: '/teacher/ApplyStudent',
+        component: _import('Teacher/Topic/ApplyStudent'),
+        name: 'ApplyStudent',
+        meta: { title: '申请学生', icon: 'peoples', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/Topic/ApplyStudent'),
+            name: 'ApplyStudent',
+            meta: { title: '申请学生', icon: 'peoples', noCache: true, role: ['teacher'] }
+          }
+        ]
+      },
+      {
+        path: '/teacher/upLoadTask',
+        component: _import('Teacher/Topic/uploadTask'),
+        name: 'uploadTask',
+        meta: { title: '下达任务书', icon: 'peoples', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/Topic/uploadTask'),
+            name: 'uploadTask',
+            meta: { title: '下达任务书', icon: 'peoples', noCache: true, role: ['teacher'] }
+          }
+        ]
       }
     ]
   },

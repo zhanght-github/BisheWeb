@@ -63,6 +63,7 @@ export default {
     getUser() {
       getUserInfo(this.getUserId()).then(res => {
         this.userinfo = res.data.data
+        sessionStorage.setItem('userinfo', JSON.stringify(this.userinfo))
         this.userinfo.role = this.userinfo.role === 0 ? '同学' : this.userinfo.role === 1 ? '教师' : '管理'
       })
     },

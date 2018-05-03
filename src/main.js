@@ -36,6 +36,9 @@ Vue.prototype.getUserId = function() {
   return Cookies.get('id') || ''
 }
 
+Vue.prototype.getUsers = function() {
+  return JSON.parse(sessionStorage.getItem('userinfo'))
+}
 /**
  * 获取当前时间24小时制
  * yyyy-MM-dd HH:mm:ss

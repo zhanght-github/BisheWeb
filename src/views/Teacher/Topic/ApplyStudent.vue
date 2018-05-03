@@ -1,0 +1,143 @@
+<!--  -->
+<template>
+  <div class="checkStudent">
+    <el-table
+        :data="list"
+        style="width: 100%">
+         <el-table-column
+          property="keti"
+          label="课题名称"
+          width="250">
+          </el-table-column>
+          <el-table-column
+          property="name"
+          label="申请学生"
+          width="100">
+          </el-table-column>
+          <el-table-column
+          property="ID"
+          label="学生学号">
+          </el-table-column>
+          <el-table-column
+          property="zhuanye"
+          label="学生专业">
+          </el-table-column>
+          <el-table-column
+          property="phone"
+          label="学生电话">
+          </el-table-column>
+          <el-table-column
+          label="操作"
+          width="240">
+            <template slot-scope="scope">
+              <div v-if='scope.row.status == 0' class="handle">
+                <el-button type="primary" plain class="deepbluebtn" @click="allowStudent(scope.row)">同意</el-button>
+                <el-button type="primary" plain class="deepredbtn reject" @click="rejectStudent(scope.row)">拒绝</el-button>
+              </div>
+              <div v-if='scope.row.status == 1' class="handle">
+                <span class="allowed result">已通过</span >
+                <el-button type="primary" plain class="orangebtn" >撤销选题</el-button>
+              </div>
+              <div v-if='scope.row.status == -1' class="handle">
+                <span class="notAllowed result">未通过</span >
+                <el-button type="primary" plain class="orangebtn" >撤销选题</el-button>
+              </div>
+            </template>
+          </el-table-column>
+      </el-table>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      list: [
+        {
+          name: 'zhangsan',
+          keti: '基于vue的毕业设计管理系统',
+          ID: '141404050126',
+          zhuanye: '物联网工程',
+          phone: '15670372860',
+          status: 0
+        },
+        {
+          name: 'zhangsan',
+          keti: '基于vue的毕业设计管理系统',
+          ID: '141404050126',
+          zhuanye: '物联网工程',
+          phone: '15670372860',
+          status: 1
+        },
+        {
+          name: 'zhangsan',
+          keti: '基于vue的毕业设计管理系统',
+          ID: '141404050126',
+          zhuanye: '物联网工程',
+          phone: '15670372860',
+          status: -1
+        }
+      ]
+    }
+  },
+  methods: {
+    allowStudent(val) {
+      this.$confirm(`确定同意${val.name}选择「${val.keti}」课题?`, '同意选题', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: 'blueMessage'
+      })
+        .then(() => {})
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+        })
+    },
+    rejectStudent(val) {
+      this.$confirm(`确定拒绝${val.name}选择「${val.keti}」课题?`, '拒绝选题', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+        .then(() => {})
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+        })
+    }
+  }
+}
+</script>
+<style  scoped rel="stylesheet/scss" lang="scss">
+.checkStudent {
+  margin-top: 60px;
+}
+</style>
+<style  rel="stylesheet/scss" lang="scss">
+.checkStudent {
+  .el-table {
+    .handle {
+      .result {
+        color: #ffffff;
+        font-size: 12px;
+        display: inline-block;
+        padding: 8px 15px;
+        border-radius: 4px;
+        margin-right: 8px;
+      }
+      .reject {
+        padding: 12px 32px;
+      }
+      .allowed {
+        background-color: #6ed596;
+      }
+      .notAllowed {
+        background-color: #b8b9c7;
+      }
+    }
+  }
+}
+</style>
