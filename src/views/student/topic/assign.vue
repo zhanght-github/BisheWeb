@@ -43,40 +43,39 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        creatTime:'xxx',
-        studentName:'xxx',
-        userid:'xxx'
-      }
-    },
-    methods: {},
-    created() {
+export default {
+  data() {
+    return {
+      creatTime: 'xxx',
+      studentName: 'xxx',
+      userid: 'xxx'
     }
-  }
+  },
+  methods: {},
+  created() {}
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.showAssign{
+.showAssign {
   font-size: 15px;
-  .assignTitle{
+  .assignTitle {
     padding: 15px 0 15px 20px;
-    span{
+    span {
       color: forestgreen;
       padding: 15px;
       font-size: 16px;
     }
   }
-  .content{
+  .content {
     background: white;
     padding: 0 20px;
-    .content-item{
+    .content-item {
       padding-top: 10px;
-      .title{
+      .title {
         padding: 10px;
       }
-      .item-input{
+      .item-input {
         height: auto;
       }
     }

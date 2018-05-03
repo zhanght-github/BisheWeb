@@ -143,61 +143,62 @@
 </template>
 
 <script>
-  import {topicSelect,studentSelect} from '@/api/student'
+import { topicSelect, studentSelect } from '@/api/student'
 
-  export default {
-    data() {
-      return {
-        page: 1,
-        size: 10,
-        loading: false,
-        topicDialog:false,
-        tableData: [],
-        showData:{}
-      }
-    },
-    methods: {
-      getData() {
-        topicSelect(this.page - 1, this.size).then(res => {
-          this.tableData = res.data.data.content
-        })
-      },
-      closeDialog(){
-        this.topicDialog = !this.topicDialog;
-      },
-      handleOpen(data){
-        this.topicDialog = !this.topicDialog;
-        if (data !== undefined){
-          this.showData = JSON.parse(JSON.stringify(data));
-          this.showData.schedule=this.showData.schedule.replace(/<br>/g,"\n")
-          this.showData.topiccontent=this.showData.topiccontent.replace(/<br>/g,"\n")
-        }
-      },
-      handleSelect(id,name){
-        this.$confirm(`确定要选择「${name}」课题吗?`, '确定选择？', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          customClass: 'blueMessage'
-        }).then(() => {
-          studentSelect(id, this.getUserId()).then(res => {
-            this.$message({type:'success',message:res.message})
-          })
-        })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消'
-            })
-          })
-      }
-    },
-    created() {
-      this.getData()
+export default {
+  data() {
+    return {
+      page: 1,
+      size: 10,
+      loading: false,
+      topicDialog: false,
+      tableData: [],
+      showData: {}
     }
+  },
+  methods: {
+    getData() {
+      topicSelect(this.page - 1, this.size).then(res => {
+        this.tableData = res.data.data.content
+      })
+    },
+    closeDialog() {
+      this.topicDialog = !this.topicDialog
+    },
+    handleOpen(data) {
+      this.topicDialog = !this.topicDialog
+      if (data !== undefined) {
+        this.showData = JSON.parse(JSON.stringify(data))
+        this.showData.schedule = this.showData.schedule.replace(/<br>/g, '\n')
+        this.showData.topiccontent = this.showData.topiccontent.replace(/<br>/g, '\n')
+      }
+    },
+    handleSelect(id, name) {
+      this.$confirm(`确定要选择「${name}」课题吗?`, '确定选择？', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        customClass: 'blueMessage'
+      })
+        .then(() => {
+          studentSelect(id, this.getUserId()).then(res => {
+            this.$message({ type: 'success', message: res.message })
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+        })
+    }
+  },
+  created() {
+    this.getData()
   }
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  @import "../../../styles/common";
+@import '../../../styles/common';
 </style>
