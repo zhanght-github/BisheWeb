@@ -75,6 +75,161 @@ export const asyncRouterMap = [
       }
     ]
   },
+  // 学生部分
+  {
+    path: '/student',
+    component: Layout,
+    meta: { title: '选题管理', role: ['student'] },
+    children: [
+      {
+        path: '/student/topic',
+        component: _import('student/topic/select'),
+        name: 'topic',
+        meta: { title: '选择课题', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/topic/select'),
+            name: 'topic',
+            meta: { title: '选择课题', icon: 'ico_game', noCache: true, role: ['student'] }
+          }
+        ]
+      },
+      {
+        path: '/student/assign',
+        component: _import('student/topic/assign'),
+        name: 'topic',
+        meta: { title: '选择课题', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/topic/assign'),
+            name: 'topic',
+            meta: { title: '查看任务书', icon: 'ico_game', noCache: true, role: ['student'] }
+          }
+        ]
+      },
+      {
+        path: '/student/literature',
+        component: _import('student/topic/report'),
+        name: 'topic',
+        meta: { title: '选择课题', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/topic/literature'),
+            name: 'topic',
+            meta: { title: '文献综述', icon: 'ico_game', noCache: true, role: ['student'] }
+          }
+        ]
+      },
+      {
+        path: '/student/report',
+        component: _import('student/topic/report'),
+        name: 'topic',
+        meta: { title: '选择课题', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/topic/report'),
+            name: 'topic',
+            meta: { title: '填写开题报告', icon: 'ico_game', noCache: true, role: ['student'] }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/student',
+    component: Layout,
+    meta: { title: '中期检查', role: ['student'] },
+    children: [
+      {
+        path: '/student/check',
+        component: _import('student/topic/check'),
+        name: 'topic',
+        meta: { title: '中期检查', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/topic/check'),
+            name: 'topic',
+            meta: { title: '中期检查', icon: 'ico_promotion', noCache: true, role: ['student'] }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/student',
+    component: Layout,
+    meta: { title: '论文管理', role: ['student'] },
+    children: [
+      {
+        path: '/student/draft',
+        component: _import('student/topic/draft'),
+        name: 'topic',
+        meta: { title: '论文管理', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/topic/draft'),
+            name: 'topic',
+            meta: { title: '论文草稿', icon: 'ico_game', noCache: true, role: ['student'] }
+          }
+        ]
+      },
+      {
+        path: '/student/finalize',
+        component: _import('student/topic/finalize'),
+        name: 'topic',
+        meta: { title: '论文管理', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/topic/finalize'),
+            name: 'topic',
+            meta: { title: '论文定稿', icon: 'ico_game', noCache: true, role: ['student'] }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/student',
+    component: Layout,
+    meta: { title: '评分答辩', role: ['student'] },
+    children: [
+      {
+        path: '/student/myArgument',
+        component: _import('student/topic/myArgument'),
+        name: 'topic',
+        meta: { title: '评分答辩', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/topic/myArgument'),
+            name: 'topic',
+            meta: { title: '我的答辩', icon: 'ico_game', noCache: true, role: ['student'] }
+          }
+        ]
+      },
+      {
+        path: '/student/argumentGrade',
+        component: _import('student/topic/argumentGrade'),
+        name: 'topic',
+        meta: { title: '评分答辩', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/topic/argumentGrade'),
+            name: 'topic',
+            meta: { title: '答辩成绩', icon: 'ico_game', noCache: true, role: ['student'] }
+          }
+        ]
+      },
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

@@ -75,8 +75,7 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store
-            .dispatch('login', this.loginForm)
+          this.$store.dispatch('login', this.loginForm)
             .then(() => {
               this.loading = false
               this.$router.push({ path: '/' })
@@ -120,7 +119,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-@import 'src/styles/mixin.scss';
+@import '../../../src/styles/mixin.scss';
 $bg: #2d3a4b;
 $dark_gray: #889aa4;
 $light_gray: #eee;
