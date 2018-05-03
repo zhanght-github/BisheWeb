@@ -6,3 +6,10 @@ export function topicSelect(page, size) {
     method: 'get'
   })
 }
+
+export function studentSelect(userid, topicid) {
+  return request({
+    url: `/topic/select?userid=${userid}&topicid=${topicid}`,
+    method: 'get'
+  })
+}

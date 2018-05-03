@@ -111,7 +111,7 @@ export const asyncRouterMap = [
       },
       {
         path: '/student/literature',
-        component: _import('student/topic/report'),
+        component: _import('student/topic/literature'),
         name: 'topic',
         meta: { title: '选择课题', icon: 'ico_game', role: ['student'] },
         children: [
@@ -140,7 +140,7 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/student',
+    path: '/student/check',
     component: Layout,
     meta: { title: '中期检查', role: ['student'] },
     children: [
@@ -161,7 +161,7 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/student',
+    path: '/student/manage',
     component: Layout,
     meta: { title: '论文管理', role: ['student'] },
     children: [
@@ -196,7 +196,7 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/student',
+    path: '/student/grade',
     component: Layout,
     meta: { title: '评分答辩', role: ['student'] },
     children: [

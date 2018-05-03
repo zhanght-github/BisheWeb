@@ -9,14 +9,18 @@
             <div v-html="scope.row.topiccontent"></div>
           </template>
         </el-table-column>
-        <el-table-column prop="topicstate" label="选题状态" width="120" align="center"></el-table-column>
-        <el-table-column prop="supplynum" label="选题总人数" width="120" align="center"></el-table-column>
-        <el-table-column prop="alreadynum" label="已选人数" width="120" align="center"></el-table-column>
-        <el-table-column prop="createtime" label="创建时间" width="200" align="center"></el-table-column>
-        <el-table-column label="操作" width="200">
+        <el-table-column prop="topicsource" label="题目来源" width="100" align="center"></el-table-column>
+        <el-table-column prop="teachername" label="选题负责人" width="100" align="center"></el-table-column>
+        <el-table-column prop="topictype" label="课题类型" width="100" align="center"></el-table-column>
+        <el-table-column label="已选人数/选题总人数" width="200" align="center">
+          <template slot-scope="scope">
+           {{scope.row.alreadynum}}/{{scope.row.supplynum}}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="250">
           <template slot-scope="scope" >
-            <el-button type="primary" size="small" @click="handleOpen()">查看</el-button>
-            <el-button type="success" size="small" @click="handleSelect()">选择</el-button>
+            <el-button type="primary" size="small" @click="handleOpen(scope.row)">查看</el-button>
+            <el-button type="success" size="small" @click="handleSelect(scope.row.topicid,scope.row.topicname)">选择课题</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -31,37 +35,21 @@
       <!--:total="paginationTotal">-->
       <!--</el-pagination>-->
     </div>
-    <el-dialog title="查看课题信息" class='editdia' width="450px" :visible.sync="topicDialog" :close-on-press-escape='false' :close-on-click-modal='false'>
+    <el-dialog title="查看课题信息" class='editdia' width="500px" :visible.sync="topicDialog" :close-on-press-escape='false' :close-on-click-modal='false'>
       <div class="diabody diascroll" style="height: 400px">
         <div class="detail-row">
           <div class="row-title">课题名称</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input></el-input>
+              <el-input v-model="showData.topicname" :disabled="true"></el-input>
             </span>
           </div>
         </div>
         <div class="detail-row">
           <div class="row-title">课题内容</div>
           <div class="row-content">
-            <span class="input-wrapper">
-              <el-input></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">显示排序</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">课题状态</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input></el-input>
+             <span>
+              <el-input type="textarea" v-model="showData.topiccontent" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -69,7 +57,7 @@
           <div class="row-title">选题总人数</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input></el-input>
+              <el-input v-model="showData.supplynum" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -77,7 +65,7 @@
           <div class="row-title">已选人数</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input></el-input>
+              <el-input v-model="showData.alreadynum" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -85,7 +73,7 @@
           <div class="row-title">选题时间</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input></el-input>
+              <el-input v-model="showData.createtime" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -93,7 +81,7 @@
           <div class="row-title">指导教师</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input></el-input>
+              <el-input v-model="showData.topicname" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -101,7 +89,7 @@
           <div class="row-title">课题类型</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input></el-input>
+              <el-input v-model="showData.teachername" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -109,7 +97,7 @@
           <div class="row-title">课题来源</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input></el-input>
+              <el-input v-model="showData.topicsource" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -117,7 +105,7 @@
           <div class="row-title">指导老师电话</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input></el-input>
+              <el-input v-model="showData.teacherphone" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -125,7 +113,7 @@
           <div class="row-title">日程安排</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input></el-input>
+              <el-input type="textarea" v-model="showData.schedule" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -133,7 +121,7 @@
           <div class="row-title">学院</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input></el-input>
+              <el-input v-model="showData.collegename" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -141,21 +129,21 @@
           <div class="row-title">专业</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input></el-input>
+              <el-input v-model="showData.major" :disabled="true"></el-input>
             </span>
           </div>
         </div>
       </div>
       <div class="diafoot flex">
-        <el-button type="primary" class="truebutton deepbluebtn">确定</el-button>
-        <el-button type="info" class="cancelbtn" plain @click="closeDialog()">取消</el-button>
+        <el-button type="primary" class="truebutton deepbluebtn"@click="closeDialog()">确定</el-button>
+        <!--<el-button type="info" class="cancelbtn" plain @click="closeDialog()">确定</el-button>-->
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import {topicSelect} from '@/api/student'
+  import {topicSelect,studentSelect} from '@/api/student'
 
   export default {
     data() {
@@ -164,7 +152,8 @@
         size: 10,
         loading: false,
         topicDialog:false,
-        tableData: []
+        tableData: [],
+        showData:{}
       }
     },
     methods: {
@@ -176,22 +165,29 @@
       closeDialog(){
         this.topicDialog = !this.topicDialog;
       },
-      handleOpen(){
+      handleOpen(data){
         this.topicDialog = !this.topicDialog;
+        if (data !== undefined){
+          this.showData = JSON.parse(JSON.stringify(data));
+          this.showData.schedule=this.showData.schedule.replace(/<br>/g,"\n")
+          this.showData.topiccontent=this.showData.topiccontent.replace(/<br>/g,"\n")
+        }
       },
-      handleSelect(){
-        this.$confirm(`确定要删除「${name}」吗?`, '确定删除？', {
+      handleSelect(id,name){
+        this.$confirm(`确定要选择「${name}」课题吗?`, '确定选择？', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
           customClass: 'blueMessage'
         }).then(() => {
-          console.log('确认成功');
+          studentSelect(id, this.getUserId()).then(res => {
+            this.$message({type:'success',message:res.message})
+          })
         })
           .catch(() => {
             this.$message({
               type: 'info',
-              message: '已取消删除'
+              message: '已取消'
             })
           })
       }
