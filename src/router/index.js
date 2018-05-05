@@ -161,7 +161,7 @@ export const asyncRouterMap = [
             path: '',
             component: _import('student/topic/report'),
             name: 'topic',
-            meta: { title: '填写开题报告', icon: 'ico_game', noCache: true, role: ['student'] }
+            meta: { title: '上传开题报告', icon: 'ico_game', noCache: true, role: ['student'] }
           }
         ]
       }
