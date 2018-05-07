@@ -181,8 +181,8 @@ export default {
         customClass: 'blueMessage'
       })
         .then(() => {
-          studentSelect(id, this.getUserId()).then(res => {
-            this.$message({ type: 'success', message: res.message })
+          studentSelect(this.getUserId(), id).then(res => {
+            this.$message({ type: 'success', message: res.data.message })
           })
         })
         .catch(() => {
