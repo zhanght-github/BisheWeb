@@ -29,3 +29,24 @@ export function updateTopic(data) {
     data: data
   })
 }
+
+export function topicInfo(topicid) {
+  return request({
+    url: `/topic/query?topicid=${topicid}`,
+    method: 'get'
+  })
+}
+
+export function getSelectList(pageNum, pageSize, teacherId) {
+  return request({
+    url: `/select/list?page=${pageNum}&size=${pageSize}&teacherid=${teacherId}`,
+    method: 'get'
+  })
+}
+
+export function confirmStudent(studentid, ispass) {
+  return request({
+    url: `/select/confirm?studentid=${studentid}&ispass=${ispass}`,
+    method: 'get'
+  })
+}

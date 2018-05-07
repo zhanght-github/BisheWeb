@@ -2,53 +2,55 @@
 <template>
   <div class="checkStudent">
     <el-table
-        :data="list"
+        :data="applyList"
         style="width: 100%">
          <el-table-column
-          property="keti"
+          property="topicname"
           label="课题名称"
           width="250">
           </el-table-column>
           <el-table-column
-          property="name"
+          property="studentname"
           label="申请学生"
           width="100">
           </el-table-column>
           <el-table-column
-          property="ID"
+          property="studentid"
           label="学生学号">
           </el-table-column>
           <el-table-column
-          property="zhuanye"
+          property="major"
           label="学生专业">
           </el-table-column>
           <el-table-column
-          property="phone"
+          property="studentphone"
           label="学生电话">
           </el-table-column>
           <el-table-column
           label="操作"
           width="240">
             <template slot-scope="scope">
-              <div v-if='scope.row.status == 0' class="handle">
+              <div v-if='scope.row.selectIspass == 0' class="handle">
                 <el-button type="primary" plain class="deepbluebtn" @click="allowStudent(scope.row)">同意</el-button>
                 <el-button type="primary" plain class="deepredbtn reject" @click="rejectStudent(scope.row)">拒绝</el-button>
               </div>
-              <div v-if='scope.row.status == 1' class="handle">
+              <div v-if='scope.row.selectIspass == 1' class="handle">
                 <span class="allowed result">已通过</span >
-                <el-button type="primary" plain class="orangebtn" >撤销选题</el-button>
+                <!-- <el-button type="primary" plain class="orangebtn" >撤销选题</el-button> -->
               </div>
-              <div v-if='scope.row.status == -1' class="handle">
+              <div v-if='scope.row.selectIspass == -1' class="handle">
                 <span class="notAllowed result">未通过</span >
-                <el-button type="primary" plain class="orangebtn" >撤销选题</el-button>
+                <!-- <el-button type="primary" plain class="orangebtn" >撤销选题</el-button> -->
               </div>
             </template>
           </el-table-column>
       </el-table>
+
   </div>
 </template>
 
 <script>
+import { getSelectList, confirmStudent } from '@/api/teacher'
 export default {
   data() {
     return {
@@ -77,17 +79,37 @@ export default {
           phone: '15670372860',
           status: -1
         }
-      ]
+      ],
+      pageNum: 1,
+      pageSize: 10,
+      total: 0,
+      applyList: []
     }
   },
+  mounted() {
+    this.init()
+  },
   methods: {
+    init() {
+      this.getdata()
+    },
+    getdata() {
+      getSelectList(this.pageNum - 1, this.pageSize, this.getUserId()).then(res => {
+        this.applyList = res.data.data.content
+      })
+    },
     allowStudent(val) {
-      this.$confirm(`确定同意${val.name}选择「${val.keti}」课题?`, '同意选题', {
+      this.$confirm(`确定同意${val.studentname}选择「${val.topicname}」课题?`, '同意选题', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         customClass: 'blueMessage'
       })
-        .then(() => {})
+        .then(() => {
+          confirmStudent(val.studentid, 1).then(res => {
+            console.log(res)
+            this.getdata()
+          })
+        })
         .catch(() => {
           this.$message({
             type: 'info',
