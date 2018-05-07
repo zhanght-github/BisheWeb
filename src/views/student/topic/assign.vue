@@ -66,6 +66,9 @@ export default {
           this.filename = res.data.data.taskbookPath;
           this.topicname = res.data.data.topicname;
           this.assignData = res.data.data;
+          this.assignData.taskbookContent = this.assignData.taskbookContent.replace(/<br>/g, '\n');
+          this.assignData.taskbookTechnology = this.assignData.taskbookTechnology.replace(/<br>/g, '\n');
+          this.assignData.taskbookProcess = this.assignData.taskbookProcess.replace(/<br>/g, '\n');
           this.downloadUrl = CMethods.spliceDownloadUrl(this.topicname,this.filename);
           // this.downloadUrl = "http://172.20.55.146:8080/bishe/common/download?topicname="+this.topicname+"&filename="+this.filename+""
         }

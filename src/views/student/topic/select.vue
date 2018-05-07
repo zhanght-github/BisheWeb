@@ -3,7 +3,7 @@
     <div class="tableWrapper">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="50" align="center"></el-table-column>
-        <el-table-column prop="topicname" label="课题名称" width="100" align="center"></el-table-column>
+        <el-table-column prop="topicname" label="课题名称" width="150" align="center"></el-table-column>
         <el-table-column label="选题内容" align="left">
           <template slot-scope="scope">
             <div v-html="scope.row.topiccontent"></div>
@@ -12,15 +12,15 @@
         <el-table-column prop="topicsource" label="题目来源" width="100" align="center"></el-table-column>
         <el-table-column prop="teachername" label="选题负责人" width="100" align="center"></el-table-column>
         <el-table-column prop="topictype" label="课题类型" width="100" align="center"></el-table-column>
-        <el-table-column label="已选人数/选题总人数" width="200" align="center">
+        <el-table-column label="已选人数/选题总人数" width="100" align="center">
           <template slot-scope="scope">
            {{scope.row.alreadynum}}/{{scope.row.supplynum}}
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="250">
+        <el-table-column label="操作" width="250" fixed="right">
           <template slot-scope="scope" >
-            <el-button type="primary" size="small" @click="handleOpen(scope.row)">查看</el-button>
-            <el-button type="success" size="small" @click="handleSelect(scope.row.topicid,scope.row.topicname)">选择课题</el-button>
+            <el-button class="deepbluebtn" type="primary" size="small" @click="handleOpen(scope.row)">查看</el-button>
+            <el-button class="deepbluebtn" type="success" size="small" @click="handleSelect(scope.row.topicid,scope.row.topicname)">选择课题</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -169,7 +169,7 @@ export default {
       this.topicDialog = !this.topicDialog
       if (data !== undefined) {
         this.showData = JSON.parse(JSON.stringify(data))
-        this.showData.schedule = this.showData.schedule.replace(/<br>/g, '\n')
+        this.showData.schedule = this.showData.schedule.replace(/<br>/g, '\n');
         this.showData.topiccontent = this.showData.topiccontent.replace(/<br>/g, '\n')
       }
     },
