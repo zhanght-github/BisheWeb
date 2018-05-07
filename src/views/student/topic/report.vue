@@ -7,7 +7,7 @@
         <el-table-column prop="topictype" label="课题类型" width="100" align="center"></el-table-column>
         <el-table-column prop="topicsource" label="报告状态" align="center"></el-table-column>
         <el-table-column prop="teachername" label="上传时间" width="150" align="center"></el-table-column>
-        <el-table-column label="操作" width="300">
+        <el-table-column label="操作" width="300" fixed="right">
           <template slot-scope="scope" >
             <div style="float: left;padding-right: 10px">
               <el-upload
@@ -19,13 +19,13 @@
                 :on-change="handleChange"
                 :show-file-lis="false"
                 :limit="1">
-                <el-button size="small" type="primary">上传</el-button>
+                <el-button class="deepbluebtn" size="small" type="primary">上传</el-button>
                 <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
               </el-upload>
             </div>
             <!--<el-button type="success" size="small" @click="handleOpen(scope.row)">上传</el-button>-->
-            <el-button type="primary" size="small" @click="handleOpen(scope.row)">下载</el-button>
-            <el-button type="success" size="small" @click="handleOpen(scope.row)">重新上传</el-button>
+            <el-button class="deepbluebtn" type="primary" size="small" @click="handleOpen(scope.row)">下载</el-button>
+            <el-button class="deepbluebtn" type="success" size="small" @click="handleOpen(scope.row)">重新上传</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -159,6 +159,7 @@
         topicDialog: false,
         tableData: [],
         showData: {},
+        downloadUrl:'',
         // fileList3:[{
         //   name:'docName',
         //   url:""
@@ -200,9 +201,12 @@
       handleOpen(data) {
         this.topicDialog = !this.topicDialog
         if (data !== undefined) {
-          this.showData = JSON.parse(JSON.stringify(data))
-          this.showData.schedule = this.showData.schedule.replace(/<br>/g, '\n')
-          this.showData.topiccontent = this.showData.topiccontent.replace(/<br>/g, '\n')
+          this.showData = JSON.parse(JSON.stringify(data));
+          this.showData.schedule = this.showData.schedule.replace(/<br>/g, '\n');
+          this.showData.topiccontent = this.showData.topiccontent.replace(/<br>/g, '\n');
+          // this.topicname = this.showData.topicname;
+          // this.filename = this.showData
+          // this.downloadUrl = CMethods.spliceDownloadUrl(this.topicname,this.filename);
         }
       },
       handleSelect(id, name) {

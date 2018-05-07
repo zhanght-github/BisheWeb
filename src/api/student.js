@@ -29,3 +29,10 @@ export function downloadAssign(topicname,filename) {
     method: 'get'
   })
 }
+//文献综述列表
+export function literatureList(studentid) {
+  return request({
+    url: `/open/query?studentid=${studentid}`,
+    method: 'get'
+  })
+}

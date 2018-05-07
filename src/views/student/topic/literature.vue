@@ -3,14 +3,14 @@
     <div class="tableWrapper">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
-        <el-table-column prop="topicname" label="文献综述状态" width="100" align="center"></el-table-column>
-        <el-table-column label="导师审批状态" width="100" align="left"></el-table-column>
+        <el-table-column prop="topicname" label="文献综述状态" width="150" align="center"></el-table-column>
+        <el-table-column label="导师审批状态" width="150" align="left"></el-table-column>
         <el-table-column prop="topicsource" label="分数" align="center"></el-table-column>
         <el-table-column prop="teachername" label="评阅老师" width="150" align="center"></el-table-column>
         <el-table-column prop="topictype" label="评阅时间" width="200" align="center"></el-table-column>
-        <el-table-column label="操作" width="300">
+        <el-table-column label="操作" width="200" fixed="right">
           <template slot-scope="scope" >
-            <el-button type="primary" size="small" @click="handleOpen(scope.row)">查看审核意见</el-button>
+            <el-button class="deepbluebtn" type="primary" size="small" @click="handleOpen(scope.row)">查看审核意见</el-button>
               <div style="float: left;padding-right: 10px">
                 <el-upload
                   class="upload-demo"
@@ -21,7 +21,7 @@
                   :on-change="handleChange"
                   :show-file-lis="false"
                   :limit="1">
-                  <el-button size="small" type="primary">上传</el-button>
+                  <el-button class="deepbluebtn" size="small" type="primary">上传</el-button>
                   <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
                 </el-upload>
               </div>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-  import { topicSelect, studentSelect } from '@/api/student'
+  import { literatureList } from '@/api/student'
 
   export default {
     data() {
@@ -69,13 +69,14 @@
         loading: false,
         topicDialog: false,
         tableData: [],
-        showData: {}
+        showData: {},
+        uploadURL:""
       }
     },
     methods: {
       getData() {
-        topicSelect(this.page - 1, this.size).then(res => {
-          this.tableData = res.data.data.content
+        literatureList(this.getUserId()).then(res => {
+          this.tableData = res.data.data.content;
         })
       },
       closeDialog() {
@@ -109,25 +110,6 @@
       },
       handleContractUpload(resp,file,filelist){
         this.$message({message:'上传文件成功!',type:'success'})
-      },
-      handleSelect(id, name) {
-        this.$confirm(`确定要选择「${name}」课题吗?`, '确定选择？', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          customClass: 'blueMessage'
-        })
-          .then(() => {
-            studentSelect(id, this.getUserId()).then(res => {
-              this.$message({ type: 'success', message: res.message })
-            })
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消'
-            })
-          })
       }
     },
     created() {
