@@ -536,6 +536,7 @@ export default {
   .topiccontent {
     align-items: flex-start !important;
     padding-left: 24px !important;
+    margin-bottom: 70px;
   }
   .topicDia {
     .diabody {

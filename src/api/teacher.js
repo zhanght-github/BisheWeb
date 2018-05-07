@@ -50,3 +50,25 @@ export function confirmStudent(studentid, ispass) {
     method: 'get'
   })
 }
+
+export function confirmAready(pageNum, pageSize, teacherId) {
+  return request({
+    url: `/select/successlist?page=${pageNum}&size=${pageSize}&teacherid=${teacherId}`,
+    method: 'get'
+  })
+}
+
+export function writeTaskbook(data) {
+  return request({
+    url: '/select/write_taskbook',
+    method: 'post',
+    data: data
+  })
+}
+
+export function getOpenlist(pageNum, pageSize, teacherId) {
+  return request({
+    url: `/open/openlist?page=${pageNum}&size=${pageSize}&teacherid=${teacherId}`,
+    method: 'get'
+  })
+}

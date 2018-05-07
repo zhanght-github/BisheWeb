@@ -36,10 +36,13 @@
             </template>
           </el-table-column>
     </el-table>
+    <Pagging :total='total' :PageNum='pageNum' :pageSize='pageSize' @handlePageSize='handlePageSize' @handlePageNum='handlePageNum'></Pagging>
   </div>
 </template>
 
 <script>
+import Pagging from '../../common/Pagging'
+import { getOpenlist } from '@/api/teacher'
 export default {
   data() {
     return {
@@ -71,7 +74,32 @@ export default {
           phone: '15670372860',
           status: -1
         }
-      ]
+      ],
+      pageNum: 1,
+      pageSize: 10,
+      total: 0,
+      dataList: []
+    }
+  },
+  components: { Pagging },
+  mounted() {
+    this.getData()
+  },
+  methods: {
+    handlePageSize(val) {
+      this.pageSize = val
+      this.getData()
+    },
+    handlePageNum(val) {
+      this.pageNum = val
+      this.getData()
+    },
+    getData() {
+      getOpenlist(this.pageNum - 1, this.pageSize, this.getUserId()).then(res => {
+        this.dataList = res.data.data.content
+        this.total = res.data.data.total
+        console.log(this.dataList)
+      })
     }
   }
 }
@@ -85,6 +113,7 @@ export default {
 @import 'src/styles/variables.scss';
 .LiteratureReview {
   .el-table {
+    margin-bottom: 70px;
     .handle {
       .result {
         color: #ffffff;

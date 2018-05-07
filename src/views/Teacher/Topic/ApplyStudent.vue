@@ -45,47 +45,23 @@
             </template>
           </el-table-column>
       </el-table>
-
+    <Pagging :total='total' :PageNum='pageNum' :pageSize='pageSize' @handlePageSize='handlePageSize' @handlePageNum='handlePageNum'></Pagging>
   </div>
 </template>
 
 <script>
+import Pagging from '../../common/Pagging'
 import { getSelectList, confirmStudent } from '@/api/teacher'
 export default {
   data() {
     return {
-      list: [
-        {
-          name: 'zhangsan',
-          keti: '基于vue的毕业设计管理系统',
-          ID: '141404050126',
-          zhuanye: '物联网工程',
-          phone: '15670372860',
-          status: 0
-        },
-        {
-          name: 'zhangsan',
-          keti: '基于vue的毕业设计管理系统',
-          ID: '141404050126',
-          zhuanye: '物联网工程',
-          phone: '15670372860',
-          status: 1
-        },
-        {
-          name: 'zhangsan',
-          keti: '基于vue的毕业设计管理系统',
-          ID: '141404050126',
-          zhuanye: '物联网工程',
-          phone: '15670372860',
-          status: -1
-        }
-      ],
       pageNum: 1,
       pageSize: 10,
       total: 0,
       applyList: []
     }
   },
+  components: { Pagging },
   mounted() {
     this.init()
   },
@@ -93,9 +69,18 @@ export default {
     init() {
       this.getdata()
     },
+    handlePageSize(val) {
+      this.pageSize = val
+      this.getdata()
+    },
+    handlePageNum(val) {
+      this.pageNum = val
+      this.getdata()
+    },
     getdata() {
       getSelectList(this.pageNum - 1, this.pageSize, this.getUserId()).then(res => {
         this.applyList = res.data.data.content
+        this.total = res.data.data.total
       })
     },
     allowStudent(val) {
@@ -106,7 +91,6 @@ export default {
       })
         .then(() => {
           confirmStudent(val.studentid, 1).then(res => {
-            console.log(res)
             this.getdata()
           })
         })
@@ -118,11 +102,15 @@ export default {
         })
     },
     rejectStudent(val) {
-      this.$confirm(`确定拒绝${val.name}选择「${val.keti}」课题?`, '拒绝选题', {
+      this.$confirm(`确定拒绝${val.studentname}选择「${val.topicname}」课题?`, '拒绝选题', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       })
-        .then(() => {})
+        .then(() => {
+          confirmStudent(val.studentid, -1).then(res => {
+            this.getdata()
+          })
+        })
         .catch(() => {
           this.$message({
             type: 'info',
@@ -141,6 +129,7 @@ export default {
 <style  rel="stylesheet/scss" lang="scss">
 .checkStudent {
   .el-table {
+    margin-bottom: 70px;
     .handle {
       .result {
         color: #ffffff;

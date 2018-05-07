@@ -36,10 +36,12 @@
             </template>
           </el-table-column>
     </el-table>
+    <Pagging :total='total' :PageNum='pageNum' :pageSize='pageSize' @handlePageSize='handlePageSize' @handlePageNum='handlePageNum'></Pagging>
   </div>
 </template>
 
 <script>
+import Pagging from '../../common/Pagging'
 export default {
   data() {
     return {
@@ -71,15 +73,24 @@ export default {
           phone: '15670372860',
           status: -1
         }
-      ]
+      ],
+      pageNum: 1,
+      pageSize: 10,
+      total: 0
     }
   },
+  components: { Pagging },
   methods: {
-    openIssued() {
-      var WordApp = new ActiveXObject('Word.Application')
-      WordApp.Application.Visible = true
-      var Doc = WordApp.Documents.Add('../../../assets/ceshi.docx', true)
-    }
+    handlePageSize(val) {
+      this.pageSize = val
+      this.getData()
+    },
+    handlePageNum(val) {
+      this.pageNum = val
+      this.getData()
+    },
+    getData() {},
+    openIssued() {}
   }
 }
 </script>
@@ -91,6 +102,7 @@ export default {
 <style  rel="stylesheet/scss" lang="scss">
 @import 'src/styles/variables.scss';
 .OpeningReport {
+  margin-bottom: 70px;
   .el-table {
     .handle {
       .result {

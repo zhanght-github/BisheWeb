@@ -39,10 +39,7 @@ Vue.prototype.getUserId = function() {
 Vue.prototype.getUsers = function() {
   return JSON.parse(sessionStorage.getItem('userinfo'))
 }
-/**
- * 获取当前时间24小时制
- * yyyy-MM-dd HH:mm:ss
- */
+
 Vue.prototype.get24Hours = function() {
   var date = new Date()
   var seperator1 = '-'
@@ -60,6 +57,18 @@ Vue.prototype.get24Hours = function() {
   }${seperator2}${date.getSeconds()}`
   return currentdate
 }
+Vue.prototype.replaceBR = function(val) {
+  if (val) {
+    return val.replace(/<br>/g, '\n')
+  }
+}
+
+Vue.prototype.replaceN = function(val) {
+  if (val) {
+    return val.replace(/\n/g, '<br>')
+  }
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

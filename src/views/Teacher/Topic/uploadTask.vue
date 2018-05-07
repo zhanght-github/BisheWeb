@@ -2,52 +2,58 @@
 <template>
   <div class="uploadTask">
     <el-table
-        :data="list"
+        :data="studentList"
         style="width: 100%">
          <el-table-column
-          property="keti"
+          property="topicname"
           label="课题名称"
           width="250">
           </el-table-column>
           <el-table-column
-          property="name"
+          property="studentname"
           label="申请学生"
           width="100">
           </el-table-column>
           <el-table-column
-          property="ID"
-          label="学生学号">
+          property="studentid"
+          label="学生学号"
+           width="100">
           </el-table-column>
           <el-table-column
-          property="zhuanye"
-          label="学生专业">
+          property="major"
+          label="学生专业"
+           >
           </el-table-column>
           <el-table-column
           label="下发状态">
           <template slot-scope="scope">
-              <div v-if='scope.row.status == 1' class="handle">
+            <div class="flex">
+              <div v-if='scope.row.taskbookContent' class="handle">
                 <span class="allowed result">已下达任务书</span >
               </div>
-              <div v-if='scope.row.status == 0' class="handle">
-                <span class="notAllowed result">未下达任务书 </span >
+              <div v-if='!scope.row.taskbookContent' class="handle">
+                <span class="notAllowed result">未下达任务书</span >
               </div>
+              <div v-if='scope.row.taskbookPath' class="handle">
+                <span class="allowed result">已下达文档</span >
+              </div>
+              <div v-if='!scope.row.taskbookPath' class="handle">
+                <span class="notAllowed result">未下达文档</span >
+              </div>
+            </div>
+
             </template>
           </el-table-column>
           <el-table-column
           label="操作"
           width="240">
             <template slot-scope="scope">
-              <div v-if='scope.row.status == 0' class="handle">
-                <el-button type="primary" plain class="deepbluebtn" @click="openIssued(scope.row)">下发任务书</el-button>
+              <div v-if='scope.row.taskbookPath' class="handle">
+                <el-button type="primary" plain class="deepbluebtn" @click="openIssued(scope.row)">下发任务</el-button>
               </div>
-              <div v-if='scope.row.status == 1' class="handle">
-                <span class="allowed result">已通过</span >
-                <el-button type="primary" plain class="orangebtn" >撤销选题</el-button>
-              </div>
-              <div v-if='scope.row.status == -1' class="handle">
-                <span class="notAllowed result">未通过</span >
-                <el-button type="primary" plain class="orangebtn" >撤销选题</el-button>
-              </div>
+              <!-- <div v-if='scope.row.taskbookPath' class="handle">
+                <el-button type="primary" plain class="deepbluebtn" @click="openIssued(scope.row)">下发任务</el-button>
+              </div> -->
             </template>
           </el-table-column>
     </el-table>
@@ -60,19 +66,33 @@
         </div>
         <div class="infobox">
           <div class="label">主要研究内容</div>
-          <el-input :autosize='false' type="textarea" v-model="uploadData.topiccontent" class="inputname" placeholder="输入课题名称"></el-input>
+          <el-input :autosize='false' type="textarea" v-model="uploadData.taskbookContent" class="inputname" placeholder="输入课题名称"></el-input>
         </div>
          <div class="infobox">
           <div class="label">目标和要求</div>
-          <el-input :autosize='false' type="textarea" v-model="uploadData.target" class="inputname" placeholder="输入课题名称"></el-input>
+          <el-input :autosize='false' type="textarea" v-model="uploadData.taskbookTechnology" class="inputname" placeholder="输入课题名称"></el-input>
         </div>
          <div class="infobox">
           <div class="label">进度安排</div>
-          <el-input :autosize='false' type="textarea" v-model="uploadData.schedule" class="inputname" placeholder="输入课题名称"></el-input>
+          <el-input :autosize='false' type="textarea" v-model="uploadData.taskbookProcess" class="inputname" placeholder="输入课题名称"></el-input>
         </div>
         <div class="infobox">
           <div class="label">参考文献</div>
-          <el-input :autosize='false' type="textarea" v-model="uploadData.文献" class="inputname" placeholder="输入课题名称"></el-input>
+          <el-input :autosize='false' type="textarea" v-model="uploadData.taskbookWenxian" class="inputname" placeholder="输入课题名称"></el-input>
+        </div>
+        <div class="infobox">
+          <div class="label">上传文档</div>
+          <el-upload
+            class="upload-demo"
+            :action='uploadURL'
+            multiple
+            :limit="1"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :before-remove="beforeRemove">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <span>(更换文件请先把上一文件'X'掉)</span>
+          </el-upload>
         </div>
       </div>
       <div class="diafoot flex">
@@ -81,65 +101,56 @@
         <el-button type="info" class="cancelbtn" plain @click="closeDialog()">取消</el-button>
       </div>
     </el-dialog>
+    <Pagging :total='total' :PageNum='pageNum' :pageSize='pageSize' @handlePageSize='handlePageSize' @handlePageNum='handlePageNum'></Pagging>
   </div>
 </template>
 
 <script>
-import { topicInfo } from '@/api/teacher'
+import Pagging from '../../common/Pagging'
+import { topicInfo, confirmAready, writeTaskbook } from '@/api/teacher'
 export default {
   data() {
     return {
-      list: [
-        {
-          name: 'zhangsan',
-          keti: '基于vue的毕业设计管理系统',
-          topicID: '110',
-          ID: '141404050126',
-          zhuanye: '物联网工程',
-          phone: '15670372860',
-          status: 0
-        },
-        {
-          name: 'zhangsan',
-          keti: '基于vue的毕业设计管理系统',
-          topicID: '110',
-          ID: '141404050126',
-          zhuanye: '物联网工程',
-          phone: '15670372860',
-          status: 1
-        },
-        {
-          name: 'zhangsan',
-          keti: '基于vue的毕业设计管理系统',
-          topicID: '110',
-          ID: '141404050126',
-          zhuanye: '物联网工程',
-          phone: '15670372860',
-          status: -1
-        }
-      ],
+      studentList: [],
+      pageNum: 1,
+      pageSize: 10,
+      total: 0,
       taskDialog: false,
       isEdit: false,
       isAdd: false,
+      uploadURL: '',
       uploadData: {
         topicname: null,
-        topicontent: null,
-        target: null,
-        schedule: null,
-        wenxian: null,
-        url: null
+        taskbookContent: null,
+        taskbookTechnology: null,
+        taskbookProcess: null,
+        taskbookWenxian: null
       },
       topicId: '918b27809308487fb862aeacbdb67a45',
       selectData: null
     }
   },
+  components: { Pagging },
+  mounted() {
+    this.getData()
+  },
   methods: {
+    getData() {
+      confirmAready(this.pageNum - 1, this.pageSize, this.getUserId()).then(res => {
+        this.studentList = res.data.data.content
+        this.total = res.data.data.total
+      })
+    },
     openIssued(val) {
       this.isAdd = true
       this.taskDialog = true
-      topicInfo(this.topicId).then(res => {
+      this.uploadURL = `http://172.20.55.225:8080/bishe/select/upload?topicname=${val.topicname}`
+      topicInfo(val.topicid).then(res => {
         this.selectData = res.data.data
-        console.log(this.selectData)
+        this.uploadData.topicname = this.selectData.topicname
+        this.uploadData.taskbookContent = this.replaceBR(this.selectData.topiccontent)
+        this.uploadData.taskbookTechnology = this.replaceBR(this.selectData.target)
+        this.uploadData.taskbookProcess = this.replaceBR(this.selectData.schedule)
       })
     },
     reset() {
@@ -151,11 +162,27 @@ export default {
         wenxian: null,
         url: null
       }
+      this.uploadURL = ''
+      this.selectData = null
     },
     closeDialog() {
       this.isAdd = false
       this.taskDialog = false
       this.reset()
+    },
+    handlePreview() {},
+    handleRemove() {},
+    beforeRemove() {},
+    addbtn() {
+      this.uploadData.taskbookContent = this.replaceN(this.selectData.topiccontent)
+      this.uploadData.taskbookTechnology = this.replaceN(this.selectData.target)
+      this.uploadData.taskbookProcess = this.replaceN(this.selectData.schedule)
+      writeTaskbook(this.uploadData).then(res => {
+        this.isAdd = this.isAdd = false
+        this.taskDialog = false
+        this.reset()
+        this.getData()
+      })
     }
   }
 }
@@ -169,6 +196,7 @@ export default {
 @import 'src/styles/variables.scss';
 .uploadTask {
   .el-table {
+    margin-bottom: 70px;
     .handle {
       .result {
         color: #ffffff;

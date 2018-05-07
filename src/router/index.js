@@ -25,16 +25,16 @@ export const constantRouterMap = [
   { path: '/404', component: _import('errorPage/404'), hidden: true },
   { path: '/401', component: _import('errorPage/401'), hidden: true },
   {
-    path: '/',
+    path: '',
     component: Layout,
     name: 'home',
-    hidden: true,
+    meta: { title: '毕业公告', role: ['teacher', 'student', 'manager'] },
     children: [
       {
         path: '',
         component: _import('Home/Index'),
         name: 'home',
-        hidden: true
+        meta: { title: '毕业公告', noCache: true, role: ['teacher', 'student', 'manager'] }
       }
     ]
   }
@@ -187,6 +187,41 @@ export const asyncRouterMap = [
             component: _import('Teacher/PaperManage/MarkTeacher'),
             name: 'MarkTeacher',
             meta: { title: '评阅老师审阅', icon: 'icon-ico_goodie', noCache: true, role: ['teacher'] }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/teacherReply',
+    component: Layout,
+    meta: { title: '答辩管理', role: ['teacher'] },
+    children: [
+      {
+        path: '/teacherReply/MyReply',
+        component: _import('Teacher/ReplyManage/MyReply'),
+        name: 'MyReply',
+        meta: { title: '我的答辩', icon: 'icon-ico_goodie', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/ReplyManage/MyReply'),
+            name: 'MyReply',
+            meta: { title: '我的答辩', icon: 'icon-ico_goodie', noCache: true, role: ['teacher'] }
+          }
+        ]
+      },
+      {
+        path: '/teacherReply/ReplyGrade',
+        component: _import('Teacher/ReplyManage/ReplyGrade'),
+        name: 'ReplyGrade',
+        meta: { title: '答辩成绩', icon: 'icon-ico_goodie', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/ReplyManage/ReplyGrade'),
+            name: 'ReplyGrade',
+            meta: { title: '答辩成绩', icon: 'icon-ico_goodie', noCache: true, role: ['teacher'] }
           }
         ]
       }
