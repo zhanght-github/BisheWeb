@@ -2,7 +2,7 @@
 <template>
   <div class="LiteratureReview">
     <el-table
-        :data="list"
+        :data="dataList"
         style="width: 100%">
          <el-table-column
           property="keti"

@@ -93,6 +93,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .header {
+  z-index: 100;
   background-color: #ffffff;
   position: fixed;
   top: 0;
