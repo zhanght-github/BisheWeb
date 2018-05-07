@@ -84,6 +84,7 @@ export default {
   components: { Pagging },
   mounted() {
     this.getData()
+    console.log(process.env.BASE_API)
   },
   methods: {
     handlePageSize(val) {

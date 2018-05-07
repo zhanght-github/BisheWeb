@@ -135,6 +135,14 @@ export default {
     this.getData()
   },
   methods: {
+    handlePageSize(val) {
+      this.pageSize = val
+      this.getData()
+    },
+    handlePageNum(val) {
+      this.pageNum = val
+      this.getData()
+    },
     getData() {
       confirmAready(this.pageNum - 1, this.pageSize, this.getUserId()).then(res => {
         this.studentList = res.data.data.content
