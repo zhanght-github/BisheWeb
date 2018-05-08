@@ -38,7 +38,7 @@
                 <span class="allowed result">已下达文档</span >
               </div>
               <div v-if='!scope.row.taskbookPath' class="handle">
-                <span class="notAllowed result">未下达文档</span >
+                <span class="notAllowed result">未上传文档</span >
               </div>
             </div>
 
@@ -48,8 +48,11 @@
           label="操作"
           width="240">
             <template slot-scope="scope">
-              <div v-if='scope.row.taskbookPath' class="handle">
-                <el-button type="primary" plain class="deepbluebtn" @click="openIssued(scope.row)">下发任务</el-button>
+              <div class="handle flex">
+                <el-button  v-if='!scope.row.taskbookContent' type="primary" plain class="deepbluebtn" @click="openIssued(scope.row)">下发任务</el-button>
+                <el-button  v-if='scope.row.taskbookContent' type="primary" plain class="deepbluebtn" @click="openIssued(scope.row)">修改任务</el-button>
+                <el-button v-if='!scope.row.taskbookPath' type="primary" plain class="deepbluebtn" @click="openUpload(scope.row)">上传文档</el-button>
+                <el-button v-if='scope.row.taskbookPath' type="primary" plain class="deepbluebtn" @click="openUpload(scope.row)">查看文档</el-button>
               </div>
               <!-- <div v-if='scope.row.taskbookPath' class="handle">
                 <el-button type="primary" plain class="deepbluebtn" @click="openIssued(scope.row)">下发任务</el-button>
@@ -58,7 +61,7 @@
           </el-table-column>
     </el-table>
 
-    <el-dialog class='editdia TaskDia' :title="isAdd===true?'新增课题':'编辑课题'" width="600px" :visible.sync="taskDialog" :close-on-press-escape='false' :close-on-click-modal='false'>
+    <el-dialog class='editdia TaskDia' :title="isAdd===true?'编辑任务书':'编辑任务书'" width="600px" :visible.sync="taskDialog" :close-on-press-escape='false' :close-on-click-modal='false'>
       <div class="diabody diascroll">
         <div class="infobox">
           <div class="label">课题名称</div>
@@ -80,8 +83,20 @@
           <div class="label">参考文献</div>
           <el-input :autosize='false' type="textarea" v-model="uploadData.taskbookWenxian" class="inputname" placeholder="输入课题名称"></el-input>
         </div>
+      </div>
+      <div class="diafoot flex">
+        <el-button v-if="isEdit"  type="primary" class="truebutton deepbluebtn"  @click="editbtn()">保存</el-button>
+        <el-button v-if="isAdd"  type="primary" class="truebutton deepbluebtn"  @click="addbtn()">确定</el-button>
+        <el-button type="info" class="cancelbtn" plain @click="closeDialog()">取消</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog class='editdia uploadDia' :title="isAdd===true?'查看文档':'查看文档'" width="600px" :visible.sync="uploadDialog" :close-on-press-escape='false' :close-on-click-modal='false'>
+      <div class="diabody">
         <div class="infobox">
-          <div class="label">上传文档</div>
+          <a  class="clickdoc doclabel" v-if='doc.docname' :href="doc.url">{{doc.docname}}</a>
+          <div   class="clickdoc doclabel" @click="download()"></div>
+          <div v-if='!doc.docname' class="doclabel">还未上传文档</div>
+
           <el-upload
             class="upload-demo"
             :action='uploadURL'
@@ -91,14 +106,13 @@
             :on-remove="handleRemove"
             :before-remove="beforeRemove">
             <el-button size="small" type="primary">点击上传</el-button>
-            <span>(更换文件请先把上一文件'X'掉)</span>
+            <span>(点击上传后更换文件请先把上一文件'X'掉)</span>
           </el-upload>
         </div>
       </div>
       <div class="diafoot flex">
-        <el-button v-if="isEdit"  type="primary" class="truebutton deepbluebtn"  @click="editbtn()">保存</el-button>
-        <el-button v-if="isAdd"  type="primary" class="truebutton deepbluebtn"  @click="addbtn()">确定</el-button>
-        <el-button type="info" class="cancelbtn" plain @click="closeDialog()">取消</el-button>
+        <el-button type="primary" class="truebutton deepbluebtn"  @click="upload()">确认上传</el-button>
+        <el-button type="info" class="cancelbtn" plain @click="closeupload()">取消</el-button>
       </div>
     </el-dialog>
     <Pagging :total='total' :PageNum='pageNum' :pageSize='pageSize' @handlePageSize='handlePageSize' @handlePageNum='handlePageNum'></Pagging>
@@ -108,6 +122,7 @@
 <script>
 import Pagging from '../../common/Pagging'
 import { topicInfo, confirmAready, writeTaskbook } from '@/api/teacher'
+import CMethods from '../../../commonJS/Methods'
 export default {
   data() {
     return {
@@ -116,6 +131,7 @@ export default {
       pageSize: 10,
       total: 0,
       taskDialog: false,
+      uploadDialog: false,
       isEdit: false,
       isAdd: false,
       uploadURL: '',
@@ -127,7 +143,11 @@ export default {
         taskbookWenxian: null
       },
       topicId: '918b27809308487fb862aeacbdb67a45',
-      selectData: null
+      selectData: null,
+      doc: {
+        docname: null,
+        url: null
+      }
     }
   },
   components: { Pagging },
@@ -152,7 +172,6 @@ export default {
     openIssued(val) {
       this.isAdd = true
       this.taskDialog = true
-      this.uploadURL = `http://172.20.55.225:8080/bishe/select/upload?topicname=${val.topicname}`
       topicInfo(val.topicid).then(res => {
         this.selectData = res.data.data
         this.uploadData.topicname = this.selectData.topicname
@@ -191,6 +210,29 @@ export default {
         this.reset()
         this.getData()
       })
+    },
+    openUpload(val) {
+      this.uploadDialog = true
+      this.uploadURL = CMethods.uploadTask(val.topicname)
+      this.doc.docname = val.taskbookPath
+      this.doc.url = CMethods.spliceDownloadUrl(val.topicname, this.doc.docname)
+      // this.docname = 'dasodia.doc'
+    },
+    upload() {
+      this.uploadDialog = false
+      this.uploadURL = ''
+      this.doc = {
+        docname: null,
+        url: null
+      }
+    },
+    closeupload() {
+      this.uploadDialog = false
+      this.uploadURL = ''
+      this.doc = {
+        docname: null,
+        url: null
+      }
     }
   }
 }
@@ -239,6 +281,21 @@ export default {
         textarea {
           height: 110px;
           resize: none;
+        }
+      }
+    }
+  }
+  .uploadDia {
+    .diabody {
+      padding: 12px 24px;
+      .doclabel {
+        margin-bottom: 15px;
+      }
+      .clickdoc {
+        text-decoration: underline;
+        &:hover {
+          cursor: pointer;
+          color: $fontblue;
         }
       }
     }

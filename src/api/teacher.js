@@ -72,3 +72,17 @@ export function getOpenlist(pageNum, pageSize, teacherId) {
     method: 'get'
   })
 }
+
+export function reportispass(studentid, ispass, score, suggest) {
+  return request({
+    url: `/open/wenxianispass?studentid=${studentid}&ispass=${ispass}&score=${score}&suggest=${suggest}`,
+    method: 'get'
+  })
+}
+
+export function openingispass(studentid, ispass, score, suggest) {
+  return request({
+    url: `/open/reportispass?studentid=${studentid}&ispass=${ispass}&score=${score}&suggest=${suggest}`,
+    method: 'get'
+  })
+}

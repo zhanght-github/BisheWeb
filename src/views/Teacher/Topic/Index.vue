@@ -22,7 +22,6 @@
         </div>
         <div class="detail flex">
           <div class="topicinfo topiccontent flex" v-html="item.topiccontent">
-
           </div>
           <div class="topicinfo source flex">
             {{item.topicsource}}
@@ -363,10 +362,10 @@ export default {
         this.$message.error('请选择课题类型')
       } else if (!this.topicdata.topicsource) {
         this.$message.error('请选择课题来源')
-      } else if (!this.topicdata.collegeid) {
-        this.$message.error('请选择学院')
-      } else if (!this.topicdata.major) {
-        this.$message.error('请选择专业')
+        // } else if (!this.topicdata.collegeid) {
+        //   this.$message.error('请选择学院')
+        // } else if (!this.topicdata.major) {
+        //   this.$message.error('请选择专业')
       } else if (!/^[1-9]\d*$/.test(this.topicdata.supplynum)) {
         this.$message.error('请设置合适人数')
         this.topicdata.supplynum = null
@@ -468,6 +467,7 @@ export default {
 .content {
   margin-top: 100px;
   padding: 10px 0;
+  margin-bottom: 70px;
   .topicBox {
     width: 100%;
     margin-bottom: 10px;
@@ -536,7 +536,6 @@ export default {
   .topiccontent {
     align-items: flex-start !important;
     padding-left: 24px !important;
-    margin-bottom: 70px;
   }
   .topicDia {
     .diabody {
