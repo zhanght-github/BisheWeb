@@ -1,4 +1,4 @@
-var baseUrl = process.env.BASE_API
+var baseUrl = process.env.BASE_API;
 let commonMethods = {
   // 下载路径
   spliceDownloadUrl(topicname, filename) {
@@ -13,6 +13,11 @@ let commonMethods = {
   //  上传文献综述
   uploadLiterature(studentid) {
     let url = `${baseUrl}/open/uploadwenxian?studentid=${studentid}`
+    return url
+  },
+//  上传开题报告
+  uploadreport(studentid){
+    let url = `${baseUrl}/open/uploadwenxian?studentid=${studentid}`;
     return url
   }
 }
