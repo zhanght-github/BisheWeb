@@ -131,15 +131,37 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/teacher/MiddleCheck',
+    path: '/teacherMiddle',
     component: Layout,
     meta: { title: '中期检查', role: ['teacher'] },
     children: [
       {
-        path: '',
+        path: '/teacherMiddle/CheckList',
+        component: _import('Teacher/MiddleCheck/CheckList'),
+        name: 'CheckList',
+        meta: { title: '检阅名单', icon: 'icon-ico_goodie', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/MiddleCheck/CheckList'),
+            name: 'CheckList',
+            meta: { title: '检阅名单', icon: 'icon-ico_goodie', noCache: true, role: ['teacher'] }
+          }
+        ]
+      },
+      {
+        path: '/teacher/MiddleCheck',
         component: _import('Teacher/MiddleCheck/Index'),
         name: 'MiddleCheck',
-        meta: { title: '中期检查', noCache: true, role: ['teacher'] }
+        meta: { title: '中期检查', icon: 'peoples', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/MiddleCheck/Index'),
+            name: 'MiddleCheck',
+            meta: { title: '中期检查', icon: 'peoples', noCache: true, role: ['teacher'] }
+          }
+        ]
       }
     ]
   },
