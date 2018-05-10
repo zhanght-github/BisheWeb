@@ -18,7 +18,7 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="250" fixed="right">
-          <template slot-scope="scope" >
+          <template slot-scope="scope">
             <el-button class="deepbluebtn" type="primary" size="small" @click="handleOpen(scope.row)">查看</el-button>
             <el-button class="deepbluebtn" type="success" size="small" @click="handleSelect(scope.row.topicid,scope.row.topicname)">选择课题</el-button>
           </template>

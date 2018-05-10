@@ -39,7 +39,7 @@
       <!--</div>-->
     <!--</div>-->
   </div>
-  <div class="footer" v-if="this.taskbookIsconfirm === 0">
+  <div class="footer" v-if="this.taskbookIsconfirm !== 1">
     <el-button type="primary" @click="submitData()">确认</el-button>
   </div>
 </div>
@@ -126,4 +126,5 @@ export default {
     text-align: center;
     vertical-align: middle;
   }
+
 </style>
