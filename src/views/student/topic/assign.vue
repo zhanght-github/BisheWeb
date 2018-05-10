@@ -39,11 +39,14 @@
       <!--</div>-->
     <!--</div>-->
   </div>
+  <div class="footer" v-if="this.taskbookIsconfirm !== 1">
+    <el-button type="primary" @click="submitData()">确认</el-button>
+  </div>
 </div>
 </template>
 
 <script>
-import { studentAssign, downloadAssign } from  '@/api/student'
+import { studentAssign, downloadAssign,submitAssign } from  '@/api/student'
 import CMethods from '../../../commonJS/Methods'
 
 export default {
@@ -54,7 +57,9 @@ export default {
       assignData:{},
       taskPath:'',
       topicname:'',
-      downloadUrl:""
+      downloadUrl:"",
+      buttonShow:'',
+      taskbookIsconfirm:''
     }
   },
   methods: {
@@ -66,12 +71,18 @@ export default {
           this.filename = res.data.data.taskbookPath;
           this.topicname = res.data.data.topicname;
           this.assignData = res.data.data;
+          this.taskbookIsconfirm = res.data.data.taskbookIsconfirm;
           this.assignData.taskbookContent = this.assignData.taskbookContent.replace(/<br>/g, '\n');
           this.assignData.taskbookTechnology = this.assignData.taskbookTechnology.replace(/<br>/g, '\n');
           this.assignData.taskbookProcess = this.assignData.taskbookProcess.replace(/<br>/g, '\n');
           this.downloadUrl = CMethods.spliceDownloadUrl(this.topicname,this.filename);
           // this.downloadUrl = "http://172.20.55.146:8080/bishe/common/download?topicname="+this.topicname+"&filename="+this.filename+""
         }
+      })
+    },
+    submitData(){
+      submitAssign(this.getUserId()).then(res=>{
+        this.buttonShow = res.data.data;
       })
     }
   },
@@ -111,4 +122,9 @@ export default {
     color: black;
     padding: 5px;
   }
+  .footer{
+    text-align: center;
+    vertical-align: middle;
+  }
+
 </style>

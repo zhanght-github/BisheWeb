@@ -3,28 +3,34 @@
     <div class="tableWrapper">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
-        <el-table-column prop="topicname" label="文献综述状态" width="150" align="center"></el-table-column>
-        <el-table-column label="导师审批状态" width="150" align="left"></el-table-column>
-        <el-table-column prop="topicsource" label="分数" align="center"></el-table-column>
+        <el-table-column prop="topicname" label="课题名称" width="150" align="center"></el-table-column>
+        <el-table-column prop="wenxianIspass" label="文献综述状态" width="150" align="center">
+          <template slot-scope="scope">
+            <span type="text" v-if="scope.row.wenxianIspass===0">待审核</span>
+            <span type="text" v-if="scope.row.wenxianIspass===1">审核通过</span>
+            <span type="text" v-if="scope.row.wenxianIspass===-1">审核通过</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="wenxianScore" label="分数" align="center"></el-table-column>
         <el-table-column prop="teachername" label="评阅老师" width="150" align="center"></el-table-column>
-        <el-table-column prop="topictype" label="评阅时间" width="200" align="center"></el-table-column>
         <el-table-column label="操作" width="200" fixed="right">
           <template slot-scope="scope" >
             <el-button class="deepbluebtn" type="primary" size="small" @click="handleOpen(scope.row)">查看审核意见</el-button>
-              <div style="float: left;padding-right: 10px">
-                <el-upload
-                  class="upload-demo"
-                  action="https://jsonplaceholder.typicode.com/posts/"
-                  :before-upload="handleContractBefore"
-                  :on-exceed="handleExceedContract"
-                  :on-success="handleContractUpload"
-                  :on-change="handleChange"
-                  :show-file-lis="false"
-                  :limit="1">
-                  <el-button class="deepbluebtn" size="small" type="primary">上传</el-button>
-                  <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
-                </el-upload>
-              </div>
+            <div>
+              <el-upload
+                class="upload-demo"
+                :action="uploadURL"
+                multiple
+                :before-upload="handleContractBefore"
+                :on-exceed="handleExceedContract"
+                :on-success="handleContractUpload"
+                :on-change="handleChange"
+                :show-file-lis="false"
+                :limit="1">
+                <el-button class="deepbluebtn" size="small" type="primary">上传文献综述</el-button>
+                <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+              </el-upload>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -45,7 +51,7 @@
           <div class="row-title">导师审核意见</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input type="textarea" v-model="showData.schedule" :disabled="true"></el-input>
+              <el-input type="textarea" v-model="showData.wenxianSuggest" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -60,6 +66,7 @@
 
 <script>
   import { literatureList } from '@/api/student'
+  import CMethods from '../../../commonJS/Methods'
 
   export default {
     data() {
@@ -76,14 +83,16 @@
     methods: {
       getData() {
         literatureList(this.getUserId()).then(res => {
-          this.tableData = res.data.data.content;
-        })
+          this.tableData = res.data.data;
+        });
+        this.uploadURL = CMethods.uploadLiterature(this.getUserId())
       },
       closeDialog() {
         this.topicDialog = !this.topicDialog
       },
       handleOpen(data) {
-        this.topicDialog = !this.topicDialog
+        this.topicDialog = !this.topicDialog;
+        this.showData.wenxianSuggest = data.wenxianSuggest;
         if (data !== undefined) {
           this.showData = JSON.parse(JSON.stringify(data))
           this.showData.schedule = this.showData.schedule.replace(/<br>/g, '\n')

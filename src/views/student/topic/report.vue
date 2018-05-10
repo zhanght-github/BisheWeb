@@ -4,16 +4,19 @@
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
         <el-table-column prop="topicname" label="课题名称" width="200" align="center"></el-table-column>
-        <el-table-column prop="topictype" label="课题类型" width="100" align="center"></el-table-column>
-        <el-table-column prop="topicsource" label="报告状态" align="center"></el-table-column>
-        <el-table-column prop="teachername" label="上传时间" width="150" align="center"></el-table-column>
-        <el-table-column label="操作" width="300" fixed="right">
+        <el-table-column prop="wenxianIspass" label="报告状态" align="center">
+          <template slot-scope="scope">
+            <span type="text" v-if="scope.row.wenxianIspass===0">待审核</span>
+            <span type="text" v-if="scope.row.wenxianIspass===1">审核通过</span>
+            <span type="text" v-if="scope.row.wenxianIspass===-1">审核不通过</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="240" fixed="right">
           <template slot-scope="scope" >
             <div style="float: left;padding-right: 10px">
               <el-upload
                 class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :before-upload="handleContractBefore"
+                :action="uploadUrl"
                 :on-exceed="handleExceedContract"
                 :on-success="handleContractUpload"
                 :on-change="handleChange"
@@ -24,8 +27,7 @@
               </el-upload>
             </div>
             <!--<el-button type="success" size="small" @click="handleOpen(scope.row)">上传</el-button>-->
-            <el-button class="deepbluebtn" type="primary" size="small" @click="handleOpen(scope.row)">下载</el-button>
-            <el-button class="deepbluebtn" type="success" size="small" @click="handleOpen(scope.row)">重新上传</el-button>
+            <a :href="downloadUrl" class="deepbluebtn downStyle" size="small">下载</a>
           </template>
         </el-table-column>
       </el-table>
@@ -148,8 +150,8 @@
 </template>
 
 <script>
-  import { topicSelect, studentSelect } from '@/api/student'
-
+  import { literatureList, studentSelect } from '@/api/student'
+  import CMethods from '../../../commonJS/Methods'
   export default {
     data() {
       return {
@@ -160,6 +162,7 @@
         tableData: [],
         showData: {},
         downloadUrl:'',
+        uploadUrl:''
         // fileList3:[{
         //   name:'docName',
         //   url:""
@@ -168,9 +171,17 @@
     },
     methods: {
       getData() {
-        topicSelect(this.page - 1, this.size).then(res => {
-          this.tableData = res.data.data.content
-        })
+        literatureList(this.getUserId()).then(res => {
+          this.tableData = res.data.data;
+          this.topicname = res.data.data[0].topicname;
+          console.log(this.topicname)
+          this.filename = res.data.data[0].openreportPath;
+          console.log(this.filename)
+          this.downloadUrl = CMethods.spliceDownloadUrl(this.topicname,this.filename);
+          console.log(this.downloadUrl)
+          this.uploadUrl = CMethods.uploadreport(this.getUserId());
+        });
+
       },
       closeDialog() {
         this.topicDialog = !this.topicDialog
@@ -178,17 +189,7 @@
       handleChange(){
         console.log('上传文件!!!!')
       },
-      handleContractBefore(){
-        let size = file.size/1024/1024 < 20;
-        if (file.type.indexOf('doc')<0) {
-          this.$message({message:'只能上传DOC格式的文件！',type:'waning'});
-          return false;
-        }
-        if(!size){
-          this.$message({message:'文件大小不能超过20MB',type:'waning'});
-          return false;
-        }
-      },
+
       handleExceedContract(){
         this.$message({message:'开题报告只能上传一份！',type:'warning'})
       },
@@ -197,17 +198,6 @@
         //   console.log('合同上传地址')
         // }
         this.$message({message:'上传文件成功!',type:'success'})
-      },
-      handleOpen(data) {
-        this.topicDialog = !this.topicDialog
-        if (data !== undefined) {
-          this.showData = JSON.parse(JSON.stringify(data));
-          this.showData.schedule = this.showData.schedule.replace(/<br>/g, '\n');
-          this.showData.topiccontent = this.showData.topiccontent.replace(/<br>/g, '\n');
-          // this.topicname = this.showData.topicname;
-          // this.filename = this.showData
-          // this.downloadUrl = CMethods.spliceDownloadUrl(this.topicname,this.filename);
-        }
       },
       handleSelect(id, name) {
         this.$confirm(`确定要选择「${name}」课题吗?`, '确定选择？', {
@@ -237,4 +227,13 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import '../../../styles/common';
+  .downStyle{
+    width: 55px;
+    height: 40px;
+    border-radius: 2px;
+    text-align: center;
+    line-height: 40px;
+    background: #3a8ee6;
+    display: inline-block;
+  }
 </style>
