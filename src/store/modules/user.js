@@ -46,7 +46,7 @@ const user = {
                 roles = ['teacher']
                 break
               default:
-                roles = ['manager']
+                roles = ['manger']
                 break
             }
             commit('SET_ROLES', roles)

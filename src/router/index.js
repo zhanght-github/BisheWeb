@@ -37,7 +37,7 @@ export const constantRouterMap = [
         hidden: true
       }
     ]
-  },
+  }
 ]
 
 export const asyncRouterMap = [
@@ -256,6 +256,132 @@ export const asyncRouterMap = [
           }
         ]
       },
+    ]
+  },
+  // 管理员部分
+  {
+    path: '/admin/manger',
+    component: Layout,
+    meta: { title: '管理员信息', role: ['manger'] },
+    children: [
+      {
+        path: '',
+        component: _import('Admin/manger/index'),
+        name: 'topic',
+        meta: { title: '管理员信息', noCache: true, role: ['manger'] }
+      }
+    ]
+  },
+  {
+    path: '/admin',
+    component: Layout,
+    meta: { title: '查看个人信息', role: ['manger'] },
+    children: [
+      {
+        path: '/admin/personalmes',
+        component: _import('Admin/Topic/studentmes'),
+        name: 'topic',
+        meta: { title: '学生信息', icon: 'icon-ico_goodie', role: ['manger'] },
+        children: [
+          {
+            path: '',
+            component: _import('Admin/Topic/studentmes'),
+            name: 'topic',
+            meta: { title: '学生信息', icon: 'icon-ico_goodie', noCache: true, role: ['manger'] }
+          }
+        ]
+      },
+      {
+        path: '/admin/teachermes',
+        component: _import('Admin/Topic/teachermes'),
+        name: 'topic',
+        meta: { title: '教师信息', icon: 'icon-ico_goodie', role: ['manger'] },
+        children: [
+          {
+            path: '',
+            component: _import('Admin/Topic/teachermes'),
+            name: 'topic',
+            meta: { title: '教师信息', icon: 'icon-ico_goodie', noCache: true, role: ['manger'] }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/admin',
+    component: Layout,
+    meta: { title: '毕设题目', role: ['manger'] },
+    children: [
+      {
+        path: '/admin/bishesubject',
+        component: _import('Admin/Topic/bishesubject'),
+        name: 'topic',
+        meta: { title: '毕设题目信息', icon: 'icon-ico_goodie', role: ['manger'] },
+        children: [
+          {
+            path: '',
+            component: _import('Admin/Topic/bishesubject'),
+            name: 'topic',
+            meta: { title: '毕设题目信息', icon: 'icon-ico_goodie', noCache: true, role: ['manger'] }
+          }
+        ]
+      },
+      {
+        path: '/admin/bishegrouping',
+        component: _import('Admin/Topic/bishegrouping'),
+        name: 'topic',
+        meta: { title: '毕设中检分组', icon: 'icon-ico_goodie', role: ['manger'] },
+        children: [
+          {
+            path: '',
+            component: _import('Admin/Topic/bishegrouping'),
+            name: 'topic',
+            meta: { title: '毕设中检分组', icon: 'icon-ico_goodie', noCache: true, role: ['manger'] }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/admin',
+    component: Layout,
+    meta: { title: '毕业设计进度', role: ['manger'] },
+    children: [
+      {
+        path: '/admin/bisheprocess',
+        component: _import('Admin/Topic/bisheprocess'),
+        name: 'topic',
+        meta: { title: '毕业设计进度', icon: 'icon-ico_goodie', role: ['manger'] },
+        children: [
+          {
+            path: '',
+            component: _import('Admin/Topic/bisheprocess'),
+            name: 'topic',
+            meta: { title: '毕设题目进度', icon: 'icon-ico_goodie', noCache: true, role: ['manger'] }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/admin',
+    component: Layout,
+    meta: { title: '毕业设计成绩', role: ['manger'] },
+    children: [
+      {
+        path: '/admin/bishescore',
+        component: _import('Admin/Topic/bishescore'),
+        name: 'topic',
+        meta: { title: '毕业设计成绩', icon: 'icon-ico_goodie', role: ['manger'] },
+        children: [
+          {
+            path: '',
+            component: _import('Admin/Topic/bishescore'),
+            name: 'topic',
+            meta: { title: '毕业设计成绩', icon: 'icon-ico_goodie', noCache: true, role: ['manger'] }
+          }
+        ]
+      }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }
