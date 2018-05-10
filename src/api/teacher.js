@@ -29,3 +29,60 @@ export function updateTopic(data) {
     data: data
   })
 }
+
+export function topicInfo(topicid) {
+  return request({
+    url: `/topic/query?topicid=${topicid}`,
+    method: 'get'
+  })
+}
+
+export function getSelectList(pageNum, pageSize, teacherId) {
+  return request({
+    url: `/select/list?page=${pageNum}&size=${pageSize}&teacherid=${teacherId}`,
+    method: 'get'
+  })
+}
+
+export function confirmStudent(studentid, ispass) {
+  return request({
+    url: `/select/confirm?studentid=${studentid}&ispass=${ispass}`,
+    method: 'get'
+  })
+}
+
+export function confirmAready(pageNum, pageSize, teacherId) {
+  return request({
+    url: `/select/successlist?page=${pageNum}&size=${pageSize}&teacherid=${teacherId}`,
+    method: 'get'
+  })
+}
+
+export function writeTaskbook(data) {
+  return request({
+    url: '/select/write_taskbook',
+    method: 'post',
+    data: data
+  })
+}
+
+export function getOpenlist(pageNum, pageSize, teacherId) {
+  return request({
+    url: `/open/openlist?page=${pageNum}&size=${pageSize}&teacherid=${teacherId}`,
+    method: 'get'
+  })
+}
+
+export function reportispass(studentid, ispass, score, suggest) {
+  return request({
+    url: `/open/wenxianispass?studentid=${studentid}&ispass=${ispass}&score=${score}&suggest=${suggest}`,
+    method: 'get'
+  })
+}
+
+export function openingispass(studentid, ispass, score, suggest) {
+  return request({
+    url: `/open/reportispass?studentid=${studentid}&ispass=${ispass}&score=${score}&suggest=${suggest}`,
+    method: 'get'
+  })
+}

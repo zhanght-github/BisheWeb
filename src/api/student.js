@@ -22,10 +22,26 @@ export function studentAssign(studentid) {
     method: 'get'
   })
 }
+
+//任务书确定接口
+export function submitAssign(studentid) {
+  return request({
+    url: `/select/confirm_taskbook?studentid=${studentid}`,
+    method: 'get'
+  })
+}
+
 //导出任务书
 export function downloadAssign(topicname,filename) {
   return request({
     url: `/common/download?topicname=${topicname}&filename=${filename}`,
+    method: 'get'
+  })
+}
+//文献综述列表
+export function literatureList(studentid) {
+  return request({
+    url: `/open/query?studentid=${studentid}`,
     method: 'get'
   })
 }

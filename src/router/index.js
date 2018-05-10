@@ -25,16 +25,16 @@ export const constantRouterMap = [
   { path: '/404', component: _import('errorPage/404'), hidden: true },
   { path: '/401', component: _import('errorPage/401'), hidden: true },
   {
-    path: '/',
+    path: '',
     component: Layout,
     name: 'home',
-    hidden: true,
+    meta: { title: '毕业公告', role: ['teacher', 'student', 'manager'] },
     children: [
       {
         path: '',
         component: _import('Home/Index'),
         name: 'home',
-        hidden: true
+        meta: { title: '毕业公告', noCache: true, role: ['teacher', 'student', 'manager'] }
       }
     ]
   }
@@ -98,6 +98,152 @@ export const asyncRouterMap = [
             component: _import('Teacher/Topic/uploadTask'),
             name: 'uploadTask',
             meta: { title: '下达任务书', icon: 'peoples', noCache: true, role: ['teacher'] }
+          }
+        ]
+      },
+      {
+        path: '/teacher/LiteratureReview',
+        component: _import('Teacher/Topic/LiteratureReview'),
+        name: 'LiteratureReview',
+        meta: { title: '文献综述', icon: 'peoples', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/Topic/LiteratureReview'),
+            name: 'LiteratureReview',
+            meta: { title: '文献综述', icon: 'peoples', noCache: true, role: ['teacher'] }
+          }
+        ]
+      }, {
+        path: '/teacher/OpeningReport',
+        component: _import('Teacher/Topic/OpeningReport'),
+        name: 'OpeningReport',
+        meta: { title: '审核开题报告', icon: 'peoples', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/Topic/OpeningReport'),
+            name: 'OpeningReport',
+            meta: { title: '审核开题报告', icon: 'peoples', noCache: true, role: ['teacher'] }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/teacherMiddle',
+    component: Layout,
+    meta: { title: '中期检查', role: ['teacher'] },
+    children: [
+      {
+        path: '/teacherMiddle/CheckList',
+        component: _import('Teacher/MiddleCheck/CheckList'),
+        name: 'CheckList',
+        meta: { title: '检阅名单', icon: 'icon-ico_goodie', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/MiddleCheck/CheckList'),
+            name: 'CheckList',
+            meta: { title: '检阅名单', icon: 'icon-ico_goodie', noCache: true, role: ['teacher'] }
+          }
+        ]
+      },
+      {
+        path: '/teacher/MiddleCheck',
+        component: _import('Teacher/MiddleCheck/Index'),
+        name: 'MiddleCheck',
+        meta: { title: '中期检查', icon: 'peoples', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/MiddleCheck/Index'),
+            name: 'MiddleCheck',
+            meta: { title: '中期检查', icon: 'peoples', noCache: true, role: ['teacher'] }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/teacherPaper',
+    component: Layout,
+    meta: { title: '论文管理', role: ['teacher'] },
+    children: [
+      {
+        path: '/teacherPaper/AdviserApprise',
+        component: _import('Teacher/PaperManage/AdviserApprise'),
+        name: 'AdviserApprise',
+        meta: { title: '指导老师审阅', icon: 'icon-ico_goodie', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/PaperManage/AdviserApprise'),
+            name: 'AdviserApprise',
+            meta: { title: '指导老师审阅', icon: 'icon-ico_goodie', noCache: true, role: ['teacher'] }
+          }
+        ]
+      },
+      {
+        path: '/teacherPaper/AdviserGrade',
+        component: _import('Teacher/PaperManage/AdviserGrade'),
+        name: 'AdviserGrade',
+        meta: { title: '指导老师评分', icon: 'icon-ico_goodie', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/PaperManage/AdviserGrade'),
+            name: 'AdviserGrade',
+            meta: { title: '指导老师评分', icon: 'icon-ico_goodie', noCache: true, role: ['teacher'] }
+          }
+        ]
+      },
+      {
+        path: '/teacherPaper/MarkTeacher',
+        component: _import('Teacher/PaperManage/MarkTeacher'),
+        name: 'MarkTeacher',
+        meta: { title: '评阅老师审阅', icon: 'icon-ico_goodie', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/PaperManage/MarkTeacher'),
+            name: 'MarkTeacher',
+            meta: { title: '评阅老师审阅', icon: 'icon-ico_goodie', noCache: true, role: ['teacher'] }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/teacherReply',
+    component: Layout,
+    meta: { title: '答辩管理', role: ['teacher'] },
+    children: [
+      {
+        path: '/teacherReply/MyReply',
+        component: _import('Teacher/ReplyManage/MyReply'),
+        name: 'MyReply',
+        meta: { title: '我的答辩', icon: 'icon-ico_goodie', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/ReplyManage/MyReply'),
+            name: 'MyReply',
+            meta: { title: '我的答辩', icon: 'icon-ico_goodie', noCache: true, role: ['teacher'] }
+          }
+        ]
+      },
+      {
+        path: '/teacherReply/ReplyGrade',
+        component: _import('Teacher/ReplyManage/ReplyGrade'),
+        name: 'ReplyGrade',
+        meta: { title: '答辩成绩', icon: 'icon-ico_goodie', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/ReplyManage/ReplyGrade'),
+            name: 'ReplyGrade',
+            meta: { title: '答辩成绩', icon: 'icon-ico_goodie', noCache: true, role: ['teacher'] }
           }
         ]
       }

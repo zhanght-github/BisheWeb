@@ -321,10 +321,10 @@
      }
    }
    .el-table__empty-block {
-     height: 630px;
-     line-height: 630px;
+     height: 530px;
+     line-height: 530px;
      &:after {
-       content: '无结果';
+       content: '暂无学生进行该操作';
        font-family: CerebriSans-SemiBold;
        font-size: 12px;
        font-weight: 600;
