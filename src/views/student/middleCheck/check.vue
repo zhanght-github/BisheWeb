@@ -3,23 +3,18 @@
     <div class="tableWrapper">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
-        <el-table-column prop="topicname" label="课题名称" width="150" align="center"></el-table-column>
-        <el-table-column prop="wenxianIspass" label="文献综述状态" width="150" align="center">
-          <template slot-scope="scope">
-            <span type="text" v-if="scope.row.wenxianIspass===0">待审核</span>
-            <span type="text" v-if="scope.row.wenxianIspass===1">审核通过</span>
-            <span type="text" v-if="scope.row.wenxianIspass===-1">审核通过</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="wenxianScore" label="分数" align="center"></el-table-column>
-        <el-table-column prop="teachername" label="评阅老师" width="150" align="center"></el-table-column>
-        <el-table-column label="操作" fixed="right">
+        <el-table-column prop="topicname" label="课题名称" width="100" align="center"></el-table-column>
+        <el-table-column prop="namelist" label="评阅老师" align="center"></el-table-column>
+        <el-table-column prop="groupid" label="组别" width="200" align="center"></el-table-column>
+        <el-table-column prop="topictype" label="中检成绩" width="200" align="center"></el-table-column>
+        <el-table-column label="操作" width="180" fixed="right">
           <template slot-scope="scope" >
-            <el-button style="float: left;margin: 10px" class="deepbluebtn" type="primary" size="small" @click="handleOpen(scope.row)">查看</el-button>
+            <el-button style="float: left;margin-top: 10px" type="primary" size="small" class="deepbluebtn" @click="handleOpen(scope.row)">查看中检意见</el-button>
             <div>
               <el-upload
                 :action="uploadURL"
                 multiple
+                style="float: right"
                 :before-upload="handleContractBefore"
                 :on-exceed="handleExceedContract"
                 :on-success="handleContractUpload"
@@ -50,7 +45,7 @@
           <div class="row-title">导师审核意见</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input type="textarea" v-model="showData.wenxianSuggest" :disabled="true"></el-input>
+              <el-input type="textarea" v-model="showData.schedule" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -64,9 +59,8 @@
 </template>
 
 <script>
-  import { literatureList } from '@/api/student'
+  import { studentSelect,middleCheckList,uploadMiddleReport } from '@/api/student'
   import CMethods from '../../../commonJS/Methods'
-
   export default {
     data() {
       return {
@@ -76,27 +70,33 @@
         topicDialog: false,
         tableData: [],
         showData: {},
-        uploadURL:""
+        uploadURL:'',
+        listData:{}
       }
     },
     methods: {
       getData() {
-        literatureList(this.getUserId()).then(res => {
-          this.tableData = res.data.data;
-        });
-        this.uploadURL = CMethods.uploadLiterature(this.getUserId())
+        middleCheckList(this.getUserId()).then(res => {
+          this.tableData = res.data.data
+        })
+        this.uploadURL = CMethods.uploadMiddleReport(this.getUserId())
       },
       closeDialog() {
         this.topicDialog = !this.topicDialog
       },
       handleOpen(data) {
-        this.topicDialog = !this.topicDialog;
-        this.showData.wenxianSuggest = data.wenxianSuggest;
+        this.topicDialog = !this.topicDialog
         if (data !== undefined) {
           this.showData = JSON.parse(JSON.stringify(data))
           this.showData.schedule = this.showData.schedule.replace(/<br>/g, '\n')
           this.showData.topiccontent = this.showData.topiccontent.replace(/<br>/g, '\n')
         }
+      },
+      handleExceedContract(){
+        this.$message({message:'开题报告只能上传一份！',type:'warning'})
+      },
+      handleContractUpload(resp,file,filelist){
+        this.$message({message:'上传文件成功!',type:'success'})
       },
       handleChange(){
         console.log('上传文件!!!!')
@@ -118,6 +118,25 @@
       },
       handleContractUpload(resp,file,filelist){
         this.$message({message:'上传文件成功!',type:'success'})
+      },
+      handleSelect(id, name) {
+        this.$confirm(`确定要选择「${name}」课题吗?`, '确定选择？', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          customClass: 'blueMessage'
+        })
+          .then(() => {
+            studentSelect(id, this.getUserId()).then(res => {
+              this.$message({ type: 'success', message: res.message })
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消'
+            })
+          })
       }
     },
     created() {
@@ -128,4 +147,9 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import '../../../styles/common';
+</style>
+<style rel="stylesheet/scss" lang="scss">
+  .select .cell{
+    line-height: 60px;
+  }
 </style>

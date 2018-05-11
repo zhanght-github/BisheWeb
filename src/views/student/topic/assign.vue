@@ -126,5 +126,8 @@ export default {
     text-align: center;
     vertical-align: middle;
   }
-
+  .cell{
+  height: 60px;
+  line-height: 60px;
+  }
 </style>

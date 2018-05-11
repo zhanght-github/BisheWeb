@@ -3,28 +3,14 @@
     <div class="tableWrapper">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
-        <el-table-column prop="topicname" label="课题名称" width="100" align="center"></el-table-column>
-        <el-table-column prop="topicnmae" label="课题类型" width="100" align="left"></el-table-column>
-        <el-table-column prop="teachername" label="评阅老师" width="150" align="center"></el-table-column>
-        <el-table-column prop="topictype" label="评阅时间" width="200" align="center"></el-table-column>
-        <el-table-column prop="topictype" label="成绩" width="200" align="center"></el-table-column>
+        <el-table-column prop="topicname" label="课题名称" width="150" align="center"></el-table-column>
+        <el-table-column prop="topicsource" label="答辩时间" width="150" align="center"></el-table-column>
+        <el-table-column prop="teachername" label="答辩地点" width="150" align="center"></el-table-column>
+        <el-table-column prop="topictype" label="答辩导师" align="center"></el-table-column>
+        <el-table-column prop="topictype" label="答辩成绩" width="100" align="center"></el-table-column>
         <el-table-column label="操作" width="150" fixed="right">
-          <template slot-scope="scope" >
-            <el-button type="primary" size="small" class="deepbluebtn" @click="handleOpen(scope.row)">查看中检意见</el-button>
-            <!--<div style="float: left;padding-right: 10px">-->
-              <!--<el-upload-->
-                <!--class="upload-demo"-->
-                <!--action="https://jsonplaceholder.typicode.com/posts/"-->
-                <!--:before-upload="handleContractBefore"-->
-                <!--:on-exceed="handleExceedContract"-->
-                <!--:on-success="handleContractUpload"-->
-                <!--:on-change="handleChange"-->
-                <!--:show-file-lis="false"-->
-                <!--:limit="1">-->
-                <!--<el-button size="small" type="primary">上传</el-button>-->
-                <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
-              <!--</el-upload>-->
-            <!--</div>-->
+          <template slot-scope="scope">
+            <el-button type="primary" size="small" style="margin-top: 10px" @click="handleOpen(scope.row)">查看详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -39,13 +25,45 @@
       <!--:total="paginationTotal">-->
       <!--</el-pagination>-->
     </div>
-    <el-dialog title="文献综述详情" class='editdia' width="500px" :visible.sync="topicDialog" :close-on-press-escape='false' :close-on-click-modal='false'>
+    <el-dialog title="答辩信息" class='editdia' width="500px" :visible.sync="topicDialog" :close-on-press-escape='false' :close-on-click-modal='false'>
       <div class="diabody diascroll" style="height: 400px">
         <div class="detail-row">
-          <div class="row-title">导师审核意见</div>
+          <div class="row-title">课题名称</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input type="textarea" v-model="showData.schedule" :disabled="true"></el-input>
+              <el-input v-model="showData.topicname" :disabled="true"></el-input>
+            </span>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="row-title">学院</div>
+          <div class="row-content">
+            <span class="input-wrapper">
+              <el-input v-model="showData.collegename" :disabled="true"></el-input>
+            </span>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="row-title">专业</div>
+          <div class="row-content">
+            <span class="input-wrapper">
+              <el-input v-model="showData.major" :disabled="true"></el-input>
+            </span>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="row-title">课题成绩</div>
+          <div class="row-content">
+             <span>
+              <el-input v-model="showData.topiccontent" :disabled="true"></el-input>
+            </span>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="row-title">导师评语</div>
+          <div class="row-content">
+            <span class="input-wrapper">
+              <el-input type="textarea" v-model="showData.supplynum" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -85,30 +103,9 @@
         this.topicDialog = !this.topicDialog
         if (data !== undefined) {
           this.showData = JSON.parse(JSON.stringify(data))
-          this.showData.schedule = this.showData.schedule.replace(/<br>/g, '\n')
+          this.showData.schedule = this.showData.schedule.replace(/<br>/g, '\n');
           this.showData.topiccontent = this.showData.topiccontent.replace(/<br>/g, '\n')
         }
-      },
-      handleChange(){
-        console.log('上传文件!!!!')
-      },
-      handleContractBefore(file){
-        let size = file.size/1024/1024 < 20;
-        // if (file.type.indexOf('docx')<0) {
-        //   this.$message({message:'只能上传DOC格式的文件！',type:'waning'});
-        //   return false;
-        // }
-        if(!size){
-          this.$message({message:'文件大小不能超过20MB',type:'waning'});
-          return false;
-        }
-      },
-
-      handleExceedContract(){
-        this.$message({message:'开题报告只能上传一份！',type:'warning'})
-      },
-      handleContractUpload(resp,file,filelist){
-        this.$message({message:'上传文件成功!',type:'success'})
       },
       handleSelect(id, name) {
         this.$confirm(`确定要选择「${name}」课题吗?`, '确定选择？', {
@@ -118,8 +115,8 @@
           customClass: 'blueMessage'
         })
           .then(() => {
-            studentSelect(id, this.getUserId()).then(res => {
-              this.$message({ type: 'success', message: res.message })
+            studentSelect(this.getUserId(), id).then(res => {
+              this.$message({ type: 'success', message: res.data.message })
             })
           })
           .catch(() => {
@@ -138,4 +135,10 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import '../../../styles/common';
+</style>
+<style rel="stylesheet/scss" lang="scss">
+  .select .cell{
+    height: 60px;
+    line-height: 60px;
+  }
 </style>

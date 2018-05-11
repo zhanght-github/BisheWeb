@@ -2,15 +2,14 @@
   <div class="select">
     <div class="tableWrapper">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
-        <el-table-column type="index" label="序号" width="50" align="center"></el-table-column>
+        <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
         <el-table-column prop="topicname" label="课题名称" width="150" align="center"></el-table-column>
         <el-table-column prop="topicsource" label="答辩时间" width="150" align="center"></el-table-column>
         <el-table-column prop="teachername" label="答辩地点" width="150" align="center"></el-table-column>
         <el-table-column prop="topictype" label="答辩导师" align="center"></el-table-column>
-        <el-table-column prop="topictype" label="答辩成绩" width="100" align="center"></el-table-column>
         <el-table-column label="操作" width="150" fixed="right">
           <template slot-scope="scope">
-            <el-button type="primary" size="small" style="margin-top: 10px" @click="handleOpen(scope.row)">查看详情</el-button>
+            <el-button class="deepbluebtn" type="primary" size="small" style="margin-top: 10px" @click="handleOpen(scope.row)">查看详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -52,18 +51,42 @@
           </div>
         </div>
         <div class="detail-row">
-          <div class="row-title">课题成绩</div>
+          <div class="row-title">答辩时间</div>
           <div class="row-content">
-             <span>
-              <el-input v-model="showData.topiccontent" :disabled="true"></el-input>
+            <span class="input-wrapper">
+              <el-input v-model="showData.alreadynum" :disabled="true"></el-input>
             </span>
           </div>
         </div>
         <div class="detail-row">
-          <div class="row-title">导师评语</div>
+          <div class="row-title">答辩地点</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input type="textarea" v-model="showData.supplynum" :disabled="true"></el-input>
+              <el-input v-model="showData.createtime" :disabled="true"></el-input>
+            </span>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="row-title">答辩导师</div>
+          <div class="row-content">
+            <span class="input-wrapper">
+              <el-input v-model="showData.topicname" :disabled="true"></el-input>
+            </span>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="row-title">小组成员</div>
+          <div class="row-content">
+            <span class="input-wrapper">
+              <el-input v-model="showData.teachername" :disabled="true"></el-input>
+            </span>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="row-title">指导老师电话</div>
+          <div class="row-content">
+            <span class="input-wrapper">
+              <el-input v-model="showData.teacherphone" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -135,4 +158,10 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import '../../../styles/common';
+</style>
+<style rel="stylesheet/scss" lang="scss">
+  .select .cell{
+    height: 60px;
+    line-height: 60px;
+  }
 </style>

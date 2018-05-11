@@ -45,3 +45,10 @@ export function literatureList(studentid) {
     method: 'get'
   })
 }
+//中检列表
+export function middleCheckList(studentid) {
+  return request({
+    url: `/middle/studentquery?studentid=${studentid}`,
+    method: 'get'
+  })
+}
