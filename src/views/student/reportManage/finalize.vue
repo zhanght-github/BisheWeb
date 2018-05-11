@@ -6,7 +6,6 @@
         <el-table-column prop="topicname" label="课题名称" width="100" align="center"></el-table-column>
         <el-table-column prop="topictype" label="课题类型" width="100" align="center"></el-table-column>
         <el-table-column prop="topicsource" label="定稿状态" align="center"></el-table-column>
-        <el-table-column prop="teachername" label="定稿上传时间" width="150" align="center"></el-table-column>
         <el-table-column prop="teachername" label="审核导师" width="100" align="center"></el-table-column>
         <el-table-column prop="teachername" label="审核时间" width="150" align="center"></el-table-column>
         <el-table-column prop="teachername" label="分数" width="100" align="center"></el-table-column>
@@ -28,7 +27,7 @@
             </div>
             <!--<el-button type="success" size="small" @click="handleOpen(scope.row)">上传</el-button>-->
             <el-button class="deepbluebtn" type="primary" size="small" @click="handleOpen(scope.row)">下载</el-button>
-            <el-button class="deepbluebtn" type="success" size="small" @click="handleOpen(scope.row)">重新上传</el-button>
+            <!--<el-button class="deepbluebtn" type="success" size="small" @click="handleOpen(scope.row)">重新上传</el-button>-->
             <el-button class="deepbluebtn" type="success" size="small" @click="handleOpen(scope.row)">查看意见</el-button>
           </template>
         </el-table-column>
@@ -50,95 +49,7 @@
           <div class="row-title">课题名称</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input v-model="showData.topicname" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">课题内容</div>
-          <div class="row-content">
-             <span>
-              <el-input type="textarea" v-model="showData.topiccontent" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">选题总人数</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.supplynum" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">已选人数</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.alreadynum" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">选题时间</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.createtime" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">指导教师</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.topicname" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">课题类型</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.teachername" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">课题来源</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.topicsource" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">指导老师电话</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.teacherphone" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">日程安排</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input type="textarea" v-model="showData.schedule" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">学院</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.collegename" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">专业</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.major" :disabled="true"></el-input>
+              <el-input v-model="showData.paperfinalPath" :disabled="true"></el-input>
             </span>
           </div>
         </div>

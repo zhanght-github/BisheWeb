@@ -4,11 +4,11 @@
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
         <el-table-column prop="topicname" label="课题名称" width="200" align="center"></el-table-column>
-        <el-table-column prop="wenxianIspass" label="报告状态" align="center">
+        <el-table-column prop="openreportIspass" label="报告状态" align="center">
           <template slot-scope="scope">
-            <span type="text" v-if="scope.row.wenxianIspass===0">待审核</span>
-            <span type="text" v-if="scope.row.wenxianIspass===1">审核通过</span>
-            <span type="text" v-if="scope.row.wenxianIspass===-1">审核不通过</span>
+            <span type="text" v-if="scope.row.openreportIspass===0">待审核</span>
+            <span type="text" v-if="scope.row.openreportIspass===1">审核通过</span>
+            <span type="text" v-if="scope.row.openreportIspass===-1">审核不通过</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="150" fixed="right">

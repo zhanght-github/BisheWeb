@@ -17,7 +17,7 @@ let commonMethods = {
   },
 //  上传开题报告
   uploadreport(studentid){
-    let url = `${baseUrl}/open/uploadwenxian?studentid=${studentid}`;
+    let url = `${baseUrl}/open/uploadreport?studentid=${studentid}`;
     return url
   },
 //  上传中检报告

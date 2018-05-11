@@ -52,3 +52,10 @@ export function middleCheckList(studentid) {
     method: 'get'
   })
 }
+//初稿列表
+export function draftList(studentid) {
+  return request({
+    url: `/defence/query?studentid=${studentid}`,
+    method: 'get'
+  })
+}
