@@ -202,3 +202,9 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 @import '../../../styles/common';
 </style>
+<style rel="stylesheet/scss" lang="scss">
+  .select .cell{
+    height: 60px;
+    line-height: 60px;
+  }
+</style>

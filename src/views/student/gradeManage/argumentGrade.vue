@@ -2,7 +2,7 @@
   <div class="select">
     <div class="tableWrapper">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
-        <el-table-column type="index" label="序号" width="50" align="center"></el-table-column>
+        <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
         <el-table-column prop="topicname" label="课题名称" width="150" align="center"></el-table-column>
         <el-table-column prop="topicsource" label="答辩时间" width="150" align="center"></el-table-column>
         <el-table-column prop="teachername" label="答辩地点" width="150" align="center"></el-table-column>
@@ -135,4 +135,10 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import '../../../styles/common';
+</style>
+<style rel="stylesheet/scss" lang="scss">
+  .select .cell{
+    height: 60px;
+    line-height: 60px;
+  }
 </style>

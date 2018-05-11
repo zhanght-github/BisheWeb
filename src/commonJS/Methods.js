@@ -19,6 +19,12 @@ let commonMethods = {
   uploadreport(studentid){
     let url = `${baseUrl}/open/uploadwenxian?studentid=${studentid}`;
     return url
+  },
+//  上传中检报告
+  uploadMiddleReport(studentid){
+    let url = `${baseUrl}/middle/uploadreport?studentid=${studentid}`;
+    return url
   }
+
 }
 export default commonMethods

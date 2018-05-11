@@ -13,12 +13,11 @@
         </el-table-column>
         <el-table-column prop="wenxianScore" label="分数" align="center"></el-table-column>
         <el-table-column prop="teachername" label="评阅老师" width="150" align="center"></el-table-column>
-        <el-table-column label="操作" width="200" fixed="right">
+        <el-table-column label="操作" fixed="right">
           <template slot-scope="scope" >
-            <el-button class="deepbluebtn" type="primary" size="small" @click="handleOpen(scope.row)">查看审核意见</el-button>
+            <el-button style="float: left;margin: 10px" class="deepbluebtn" type="primary" size="small" @click="handleOpen(scope.row)">查看</el-button>
             <div>
               <el-upload
-                class="upload-demo"
                 :action="uploadURL"
                 multiple
                 :before-upload="handleContractBefore"
@@ -27,7 +26,7 @@
                 :on-change="handleChange"
                 :show-file-lis="false"
                 :limit="1">
-                <el-button class="deepbluebtn" size="small" type="primary">上传文献综述</el-button>
+                <el-button class="deepbluebtn" size="small" type="primary">上传</el-button>
                 <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
               </el-upload>
             </div>

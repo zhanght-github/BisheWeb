@@ -320,13 +320,13 @@ export const asyncRouterMap = [
     children: [
       {
         path: '/student/check',
-        component: _import('student/topic/check'),
+        component: _import('student/middleCheck/check'),
         name: 'topic',
         meta: { title: '中期检查', icon: 'ico_game', role: ['student'] },
         children: [
           {
             path: '',
-            component: _import('student/topic/check'),
+            component: _import('student/middleCheck/check'),
             name: 'topic',
             meta: { title: '中期检查', icon: 'ico_promotion', noCache: true, role: ['student'] }
           }
@@ -341,13 +341,13 @@ export const asyncRouterMap = [
     children: [
       {
         path: '/student/draft',
-        component: _import('student/topic/draft'),
+        component: _import('student/reportManage/draft'),
         name: 'topic',
         meta: { title: '论文管理', icon: 'ico_game', role: ['student'] },
         children: [
           {
             path: '',
-            component: _import('student/topic/draft'),
+            component: _import('student/reportManage/draft'),
             name: 'topic',
             meta: { title: '论文草稿', icon: 'ico_game', noCache: true, role: ['student'] }
           }
@@ -355,13 +355,13 @@ export const asyncRouterMap = [
       },
       {
         path: '/student/finalize',
-        component: _import('student/topic/finalize'),
+        component: _import('student/reportManage/finalize'),
         name: 'topic',
         meta: { title: '论文管理', icon: 'ico_game', role: ['student'] },
         children: [
           {
             path: '',
-            component: _import('student/topic/finalize'),
+            component: _import('student/reportManage/finalize'),
             name: 'topic',
             meta: { title: '论文定稿', icon: 'ico_game', noCache: true, role: ['student'] }
           }
@@ -376,13 +376,13 @@ export const asyncRouterMap = [
     children: [
       {
         path: '/student/myArgument',
-        component: _import('student/topic/myArgument'),
+        component: _import('student/gradeManage/myArgument'),
         name: 'topic',
         meta: { title: '评分答辩', icon: 'ico_game', role: ['student'] },
         children: [
           {
             path: '',
-            component: _import('student/topic/myArgument'),
+            component: _import('student/gradeManage/myArgument'),
             name: 'topic',
             meta: { title: '我的答辩', icon: 'ico_game', noCache: true, role: ['student'] }
           }
@@ -390,13 +390,13 @@ export const asyncRouterMap = [
       },
       {
         path: '/student/argumentGrade',
-        component: _import('student/topic/argumentGrade'),
+        component: _import('student/gradeManage/argumentGrade'),
         name: 'topic',
         meta: { title: '评分答辩', icon: 'ico_game', role: ['student'] },
         children: [
           {
             path: '',
-            component: _import('student/topic/argumentGrade'),
+            component: _import('student/gradeManage/argumentGrade'),
             name: 'topic',
             meta: { title: '答辩成绩', icon: 'ico_game', noCache: true, role: ['student'] }
           }
