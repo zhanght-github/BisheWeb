@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class="MarkTeacher"></div>
+  <div>456</div>
 </template>
 
 <script>
