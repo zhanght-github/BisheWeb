@@ -86,3 +86,10 @@ export function openingispass(studentid, ispass, score, suggest) {
     method: 'get'
   })
 }
+
+export function middleStudent(teacherid) {
+  return request({
+    url: `middle/query?teacherid=${teacherid}`,
+    method: 'get'
+  })
+}

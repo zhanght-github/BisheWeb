@@ -225,6 +225,7 @@ export default {
         docname: null,
         url: null
       }
+      this.getData()
     },
     closeupload() {
       this.uploadDialog = false

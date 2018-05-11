@@ -27,11 +27,11 @@
           width="240">
             <template slot-scope="scope">
               <div v-if='scope.row.status == 0' class="handle">
-                <span class="notAllowed result">未上传中期报告</span >
+                <span class="allowed result">84分</span>
+                <span class="watchSuggest" @click="openSuggest(scope.row)">查看意见</span>
               </div>
               <div v-if='scope.row.status == 1' class="handle">
-                <el-button type="primary" plain class="deepbluebtn" @click="openIssued(scope.row)">下载</el-button>
-                <el-button type="primary" plain class="deepbluebtn" @click="openIssued(scope.row)">批阅</el-button>
+                <span class="notAllowed result">审阅老师暂未审阅</span>
               </div>
             </template>
           </el-table-column>
@@ -73,6 +73,23 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    openSuggest(val) {
+      if (val.suggest) {
+        this.$confirm(`${val.suggest}`, '审核意见', {
+          confirmButtonText: '好的',
+          customClass: 'blueMessage',
+          showCancelButton: false
+        })
+      } else {
+        this.$confirm('暂无意见', '审核意见', {
+          confirmButtonText: '好的',
+          customClass: 'blueMessage',
+          showCancelButton: false
+        })
+      }
+    }
   }
 }
 </script>
@@ -102,6 +119,13 @@ export default {
       }
       .notAllowed {
         background-color: #b8b9c7;
+      }
+      .watchSuggest {
+        text-decoration: underline;
+        &:hover {
+          cursor: pointer;
+          color: $fontblue;
+        }
       }
     }
   }
