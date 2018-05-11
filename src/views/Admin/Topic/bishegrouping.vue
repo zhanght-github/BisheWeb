@@ -13,13 +13,8 @@
         width="250">
       </el-table-column>
       <el-table-column
-        property="name"
-        label="组长"
-        width="100">
-      </el-table-column>
-      <el-table-column
-        property="subject"
-        label="副组长"
+        property="username"
+        label="组员"
         width="100">
       </el-table-column>
       <el-table-column
@@ -93,7 +88,6 @@
         teacherDate: [],
         teacherList: [],
         groupid:'',
-        tableData:[],
         selectValue:[],
         grouplist:[],
         data: [],
@@ -158,8 +152,8 @@
       },
       submitData() {
        this.closeDialog();
-        checkMiddleGroup(this.groupid,this.grouplist).then(res =>{
-          console.log('2222')
+       checkMiddleGroup({groupid:this.groupid, grouplist:this.grouplist}).then(res =>{
+          console.log(this.grouplist)
         })
       },
       show() {
@@ -173,9 +167,8 @@
         return this.data
       },
       handleChange(value, direction, movedKeys) {
-        this.selectValue = value.filter(item => {
-          return item[1]
-        })
+        this.selectValue = value[1]
+        console.log(this.selectValue)
         this.grouplist.push(this.selectValue)
       },
       handleOpen(data) {
