@@ -5,37 +5,42 @@
         <el-table-column
           prop="topicname"
           label="课题名称"
-          width="200"
+          width="300"
           align="center">
         </el-table-column>
         <el-table-column
           prop="topictype"
           label="课题类型"
-          width="100"
+          width="200"
           align="center">
         </el-table-column>
         <el-table-column
           prop="teachername"
           label="负责导师"
-          width="100"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          prop="topicsource"
-          label="所带领学生"
+          width="200"
           align="center">
         </el-table-column>
         <el-table-column
           prop="teachername"
-          label="课题状态"
-          width="150"
+          label="导师电话"
+          width="200"
           align="center">
         </el-table-column>
         <el-table-column
           label="操作"
-          width="300">
-          <template slot-scope="scope" >
-            <el-button type="success" size="small" @click="handleOpen(scope.row)">查看课题信息</el-button>
+          width="412">
+          <template slot-scope="scope">
+            <el-button type="success" @click="handleOpen(scope.row)">查看课题信息</el-button>
+            <div v-if='scope.row.topicstate === 0' class="handle">
+              <el-button type="primary" plain class="deepbluebtn" @click="allowStudent(scope.row.topicid, scope.row.topicstate, scope.row.teachername)">同意</el-button>
+              <el-button type="primary" plain class="deepredbtn reject" @click="rejectStudent(scope.row.topicid, scope.row.topicstate, scope.row.teachername)">拒绝</el-button>
+            </div>
+            <div v-if='scope.row.topicstate === 1' class="handle">
+              <span class="allowed result">已通过</span >
+            </div>
+            <div v-if='scope.row.topicstate === -1' class="handle">
+              <span class="notAllowed result">未通过</span >
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -148,6 +153,7 @@
 
 <script>
   import { topicSelect, studentSelect } from '@/api/student'
+  import { getexamine } from '@/api/admin'
 
   export default {
     data() {
@@ -157,13 +163,23 @@
         loading: false,
         topicDialog: false,
         tableData: [],
-        showData: {}
+        showData: {},
+        topic: [],
+        topiciD: [],
+        topicstate: 0,
+        teachername: [],
+        status: 'OK'
       }
     },
     methods: {
       getData() {
         topicSelect(this.page - 1, this.size).then(res => {
           this.tableData = res.data.data.content
+        })
+      },
+      getexamine() {
+        getexamine(this.topicid, this.topicstate).then(res => {
+          this.topic = res.data
         })
       },
       closeDialog() {
@@ -177,9 +193,47 @@
           this.showData.topiccontent = this.showData.topiccontent.replace(/<br>/g, '\n')
         }
       },
+      allowStudent(id, topicname, teachername) {
+        this.$confirm(`确定同意「${teachername}」的课题?`, '同意选题', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          customClass: 'blueMessage'
+        })
+          .then(() => {
+            getexamine(id, 1).then(res => {
+              this.status = res.data.status
+              this.getdata()
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消'
+            })
+          })
+      },
+      rejectStudent(id, topicname, teachername) {
+        this.$confirm(`确定拒绝「${teachername}」的课题?`, '拒绝选题', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消'
+        })
+          .then(() => {
+            getexamine(id, -1).then(res => {
+              this.status = res.data.status
+              this.getdata()
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消'
+            })
+          })
+      }
     },
     created() {
       this.getData()
+      this.getexamine()
     }
   }
 </script>

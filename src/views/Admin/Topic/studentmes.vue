@@ -44,7 +44,7 @@
           width="300">
           <template slot-scope="scope" >
             <el-button type="success" size="small" @click="handleOpen(scope.row)">修改</el-button>
-            <el-button type="danger" size="small" >删除</el-button>
+            <el-button type="danger" size="small" @click="handleDele(scope.row.userid)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -63,7 +63,14 @@
           <div class="row-title">学生学院</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input v-model="showData.collegename"></el-input>
+              <el-select v-model="college" @change="getMajor" class="selectDown">
+              <el-option
+                v-for="(item,index) in collegeList"
+                :key="index"
+                :label="item.collegename"
+                :value="item.collegeid">
+              </el-option>
+            </el-select>
             </span>
           </div>
         </div>
@@ -71,10 +78,18 @@
           <div class="row-title">学生专业</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input v-model="showData.major"></el-input>
+              <el-select v-model="showData.major" class="selectDown">
+              <el-option
+                v-for="(item,index) in majorList"
+                :key="index"
+                :label="item.majorname"
+                :value="item.majorname">
+              </el-option>
+            </el-select>
             </span>
           </div>
         </div>
+
         <div class="detail-row">
           <div class="row-title">学生学号</div>
           <div class="row-content">
@@ -101,7 +116,8 @@
         </div>
       </div>
       <div class="diafoot flex">
-        <el-button type="primary" class="truebutton deepbluebtn"@click="closeDialog()">确定</el-button>
+        <el-button type="primary" class="truebutton deepbluebtn"  @click="editbtn()">保存</el-button>
+        <el-button type="info" class="cancelbtn" @click="closeDialog()">取消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -109,8 +125,9 @@
 
 <script>
   import { topicSelect, studentSelect } from '@/api/student'
-  import { getteacher } from '@/api/admin'
+  import { getteacher, deleteuser } from '@/api/admin'
   import { register } from '@/api/login'
+  import { getCollege, getMajor } from '@/api/index'
 
   export default {
     data() {
@@ -121,40 +138,100 @@
         topicDialog: false,
         tableData: [],
         tablesData: [],
+        college:null,
         showData: {
-          username: ""
-
+          username: "",
+          userid: "",
+          userpassword: "",
+          userphone: "",
+          collegeid: "",
+          collegename: "",
+          major: "",
+          role: 0
         },
-        stuData: []
+        stuData: [],
+        collegeList: [],
+        majorList: []
       }
     },
     methods: {
-      getData() {
-        topicSelect(0, 10).then(res => {
-          this.tableData = res.data.data.content
+      getteacher() {
+        getteacher(this.page-1, this.size, 0, this.getUsers().collegeid).then(res => {
+          this.stuData = res.data.data.content
         })
       },
-      getteacher() {
-        getteacher(0, 10, 0, 1).then(res => {
-          this.stuData = res.data.data.content
+      reset(){
+        this.showData= {
+          username: "",
+            userid: "",
+            userpassword: "",
+            userphone: "",
+            collegeid: "",
+            collegename: "",
+            major: "",
+            role: 0
+        }
+        this.majorList = []
+        this.college = null
+      },
+      editbtn(){
+        register(this.showData).then(res => {
+          this.topicDialog = false
+          this.reset()
+          this.getteacher()
         })
       },
       closeDialog() {
         this.topicDialog = !this.topicDialog
+        this.showData= {
+          username: "",
+          userid: "",
+          userpassword: "",
+          userphone: "",
+          collegeid: "",
+          collegename: "",
+          major: "",
+          role: 0
+        }
+        this.majorList = []
+        this.college = null
       },
       handleOpen(data) {
         this.topicDialog = !this.topicDialog
         if (data !== undefined) {
           this.showData = JSON.parse(JSON.stringify(data))
+          this.college = data.collegeid
+          getMajor(data.collegeid).then(res => {
+            this.majorList = res.data.data
+          })
         }
-        register().then(res => {
-          this.username = data.username
+      },
+      handleDele(id) {
+        deleteuser(id).then(res=>{
+          this.getteacher()
         })
       },
+      getCollege(){
+        getCollege().then(res=>{
+          this.collegeList = res.data.data
+        })
+      },
+      getMajor(val){
+        this.showData.collegeid = val
+        this.collegeList.forEach(item=>{
+          if(item.collegeid === val){
+            this.showData.collegename = item.collegename
+          }
+        })
+        getMajor(val).then(res => {
+          this.majorList = res.data.data
+        })
+      }
     },
     created() {
-      this.getData()
+//      this.getData()
       this.getteacher()
+      this.getCollege()
     }
   }
 </script>
