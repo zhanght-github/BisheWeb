@@ -156,4 +156,7 @@
   .middleCheck .el-upload-list.el-upload-list--text{
     display: none;
   }
+  .middleCheck .el-table td, .el-table th{
+    padding: 0;
+  }
 </style>

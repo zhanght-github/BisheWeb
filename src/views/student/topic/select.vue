@@ -207,4 +207,7 @@ export default {
     height: 60px;
     line-height: 60px;
   }
+  .select .el-table td, .el-table th{
+    padding: 0;
+  }
 </style>

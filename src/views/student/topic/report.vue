@@ -1,5 +1,5 @@
 <template>
-  <div class="select">
+  <div class="report">
     <div class="tableWrapper">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
@@ -29,121 +29,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <!--<el-pagination-->
-      <!--background-->
-      <!--@size-change="handleSizeChange"-->
-      <!--@current-change="handleCurrentChange"-->
-      <!--:current-page="tableParams.pageNum"-->
-      <!--:page-sizes="[10, 20, 30]"-->
-      <!--:page-size="tableParams.pageSize"-->
-      <!--layout="total, sizes, prev, pager, next, jumper"-->
-      <!--:total="paginationTotal">-->
-      <!--</el-pagination>-->
     </div>
-    <el-dialog title="查看课题信息" class='editdia' width="500px" :visible.sync="topicDialog" :close-on-press-escape='false' :close-on-click-modal='false'>
-      <div class="diabody diascroll" style="height: 400px">
-        <div class="detail-row">
-          <div class="row-title">课题名称</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.topicname" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">课题内容</div>
-          <div class="row-content">
-             <span>
-              <el-input type="textarea" v-model="showData.topiccontent" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">选题总人数</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.supplynum" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">已选人数</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.alreadynum" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">选题时间</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.createtime" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">指导教师</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.topicname" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">课题类型</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.teachername" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">课题来源</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.topicsource" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">指导老师电话</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.teacherphone" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">日程安排</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input type="textarea" v-model="showData.schedule" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">学院</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.collegename" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">专业</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.major" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="diafoot flex">
-        <el-button type="primary" class="truebutton deepbluebtn"@click="closeDialog()">确定</el-button>
-        <!--<el-button type="info" class="cancelbtn" plain @click="closeDialog()">确定</el-button>-->
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -161,10 +47,6 @@
         showData: {},
         downloadUrl:'',
         uploadUrl:''
-        // fileList3:[{
-        //   name:'docName',
-        //   url:""
-        // }]
       }
     },
     methods: {
@@ -233,18 +115,21 @@
   }
 </style>
 <style rel="stylesheet/scss" lang="scss">
-  .select .cell{
+  .report .cell{
     line-height: 60px;
     height: 60px;
   }
-  .select .el-upload-list.el-upload-list--text{
+  .report .el-upload-list.el-upload-list--text{
     display: none;
   }
-  .select .cell .downStyle{
+  .report .cell .downStyle{
     float: right;
     margin-top: 11px;
   }
-  .select .cell .upload-demo{
+  .report .cell .upload-demo{
     float: left;
+  }
+  .report .el-table td, .el-table th{
+    padding: 0;
   }
 </style>

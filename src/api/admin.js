@@ -18,9 +18,10 @@ export function getCollegeList() {
   })
 }
 
-export function checkMiddleGroup(pageNum, pageSize, studentId) {
+export function checkMiddleGroup(data) {
   return request({
     url: `/middle/group`,
-    method: 'get'
+    method: 'post',
+    data:data
   })
 }

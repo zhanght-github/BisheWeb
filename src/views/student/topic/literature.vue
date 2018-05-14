@@ -144,4 +144,7 @@
   .literature .cell .upload-demo{
     float: left;
   }
+  .literature .el-table td, .el-table th{
+    padding: 0;
+  }
 </style>

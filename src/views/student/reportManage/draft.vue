@@ -1,31 +1,27 @@
 <template>
-  <div class="select">
+  <div class="draft">
     <div class="tableWrapper">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
-        <el-table-column prop="topicname" label="课题名称" width="100" align="center"></el-table-column>
-        <el-table-column prop="topicsource" label="初稿状态" align="center"></el-table-column>
-        <el-table-column prop="teachername" label="审核导师" width="100" align="center"></el-table-column>
-        <el-table-column label="操作" width="280" fixed="right">
+        <el-table-column prop="topicname" label="课题名称" width="200" align="center"></el-table-column>
+        <el-table-column prop="paperdraftSuggest" label="初稿状态" width="200" align="center"></el-table-column>
+        <el-table-column prop="teachername" label="审核导师" align="center"></el-table-column>
+        <el-table-column label="操作" width="240" fixed="right">
           <template slot-scope="scope" >
             <div style="float: left;padding-right: 10px">
               <el-upload
                 class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :before-upload="handleContractBefore"
+                :action="uploadUrl"
                 :on-exceed="handleExceedContract"
                 :on-success="handleContractUpload"
                 :on-change="handleChange"
                 :show-file-lis="false"
                 :limit="1">
                 <el-button class="deepbluebtn" size="small" type="primary">上传</el-button>
-                <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
               </el-upload>
             </div>
-            <!--<el-button type="success" size="small" @click="handleOpen(scope.row)">上传</el-button>-->
-            <el-button class="deepbluebtn" type="primary" size="small" @click="handleOpen(scope.row)">下载</el-button>
-            <!--<el-button class="deepbluebtn" type="success" size="small" @click="handleOpen(scope.row)">重新上传</el-button>-->
-            <el-button class="deepbluebtn" type="success" size="small" @click="handleOpen(scope.row)">查看意见</el-button>
+            <a :href="downloadUrl" class="deepbluebtn downStyle" size="small" v-if="buttonShow === 1">下载</a>
+            <el-button class="deepbluebtn" type="success" size="small" @click="openSuggest(scope.row)">查看意见</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -46,7 +42,7 @@
           <div class="row-title">审批意见</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input type="textarea" v-model="showData.paperdraftPath" :disabled="true"></el-input>
+              <el-input type="textarea" v-model="showData.paperdraftSuggest" :disabled="true"></el-input>
             </span>
           </div>
         </div>
@@ -60,7 +56,7 @@
 
 <script>
   import { topicSelect, studentSelect,draftList } from '@/api/student'
-
+  import CMethods from '../../../commonJS/Methods'
   export default {
     data() {
       return {
@@ -71,6 +67,10 @@
         tableData: [],
         showData: {},
         downloadUrl:'',
+        uploadUrl:'',
+        filename:'',
+        topicname:'',
+        buttonShow:""
         // fileList3:[{
         //   name:'docName',
         //   url:""
@@ -81,6 +81,11 @@
       getData() {
         draftList(this.getUserId()).then(res => {
           this.tableData = res.data.data
+          this.buttonShow = res.data.data[0].paperdraftIspass;
+          this.filename = res.data.data[0].paperdraftPath;
+          this.topicname = res.data.data[0].topicname;
+          this.downloadUrl = CMethods.spliceDownloadUrl(this.topicname,this.filename);
+          this.uploadUrl = CMethods.uploadDraftReport(this.getUserId());
         })
       },
       closeDialog() {
@@ -107,36 +112,22 @@
         // if(resp.status===1){
         //   console.log('合同上传地址')
         // }
+        this.getData();
         this.$message({message:'上传文件成功!',type:'success'})
       },
-      handleSelect(val) {
-        this.$confirm(`确定要选择「${name}」课题吗?`, '确定选择？', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          customClass: 'blueMessage'
-        })
-          .then(() => {
-            studentSelect(this.getUserId(), id).then(res => {
-              this.$message({ type: 'success', message: res.data.message })
-            })
+      openSuggest(val) {
+        if (val.paperdraftSuggest) {
+          this.$confirm(`${val.paperdraftSuggest}`, '审核意见', {
+            confirmButtonText: '好的',
+            customClass: 'blueMessage',
+            showCancelButton: false
           })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消'
-            })
+        } else {
+          this.$confirm('暂无意见', '审核意见', {
+            confirmButtonText: '好的',
+            customClass: 'blueMessage',
+            showCancelButton: false
           })
-      },
-      handleOpen(data) {
-        this.topicDialog = !this.topicDialog
-        if (data !== undefined) {
-          this.showData = JSON.parse(JSON.stringify(data));
-          this.showData.schedule = this.showData.schedule.replace(/<br>/g, '\n');
-          this.showData.topiccontent = this.showData.topiccontent.replace(/<br>/g, '\n');
-          // this.topicname = this.showData.topicname;
-          // this.filename = this.showData
-          // this.downloadUrl = CMethods.spliceDownloadUrl(this.topicname,this.filename);
         }
       },
       handleSelect(id, name) {
@@ -169,8 +160,27 @@
   @import '../../../styles/common';
 </style>
 <style rel="stylesheet/scss" lang="scss">
-  .select .cell{
-    height: 60px;
+  .draft .cell{
     line-height: 60px;
+    height: 60px;
+  }
+  .draft .el-upload-list.el-upload-list--text{
+    display: none;
+  }
+  .draft .cell .downStyle{
+    float: right;
+    margin-top: 11px;
+    height: 40px;
+    width: 55px;
+    border-radius: 2px;
+    text-align: center;
+    line-height: 40px;
+    margin-right: 10px;
+  }
+  .draft .cell .upload-demo{
+    float: left;
+  }
+  .draft .el-table td, .el-table th{
+    padding: 0;
   }
 </style>

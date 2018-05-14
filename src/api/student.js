@@ -52,10 +52,62 @@ export function middleCheckList(studentid) {
     method: 'get'
   })
 }
-//初稿列表
+//初稿列表/定稿列表
 export function draftList(studentid) {
   return request({
     url: `/defence/query?studentid=${studentid}`,
     method: 'get'
+  })
+}
+
+//学生查优
+export function checkGreat(state) {
+  return request({
+    url: `/score/good?state=${state}`,
+    method: 'get'
+  })
+}
+//查询答辩信息
+export function queryMessage(studentid) {
+  return request({
+    url: `/defence/query?studentid=${studentid}`,
+    method: 'get'
+  })
+}
+//查询成绩信息
+export function gradeMessage(studentid) {
+  return request({
+    url: `/score/query?studentid=${studentid}`,
+    method: 'get'
+  })
+}
+//学生留言板
+export function studentMessage(data) {
+  return request({
+    url: `/message/insert`,
+    method: 'post',
+    data: data
+  })
+}
+//学生已读消息
+export function isMessage(page,size,senderid,state) {
+  return request({
+    url: `/message/senderquery?page=${page}&size=${size}&senderid=${senderid}&state=${state}`,
+    method: 'get'
+  })
+}
+//学生未读消息
+export function notMessage(page,size,senderid,state){
+  return request({
+    url: `/message/senderquery?page=${page}&size=${size}&senderid=${senderid}&state=${state}`,
+    method: 'get'
+  })
+}
+//更改已读状态
+export function updataStatus(state,data){
+  return request({
+    url: `/message/setstate?state=${state}`,
+    method: 'post',
+    data:data
   })
 }

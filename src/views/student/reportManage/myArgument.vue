@@ -1,106 +1,25 @@
 <template>
-  <div class="select">
+  <div class="myArgument">
     <div class="tableWrapper">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
         <el-table-column prop="topicname" label="课题名称" width="150" align="center"></el-table-column>
-        <el-table-column prop="topicsource" label="答辩时间" width="150" align="center"></el-table-column>
-        <el-table-column prop="teachername" label="答辩地点" width="150" align="center"></el-table-column>
-        <el-table-column prop="topictype" label="答辩导师" align="center"></el-table-column>
+        <el-table-column prop="defenceTime" label="答辩时间" width="150" align="center"></el-table-column>
+        <el-table-column prop="defenceLocation" label="答辩地点" width="150" align="center"></el-table-column>
+        <el-table-column prop="groupid" label="答辩分组" width="150" align="center"></el-table-column>
+        <el-table-column prop="teachername" label="答辩导师" align="center"></el-table-column>
         <el-table-column label="操作" width="150" fixed="right">
-          <template slot-scope="scope">
-            <el-button class="deepbluebtn" type="primary" size="small" style="margin-top: 10px" @click="handleOpen(scope.row)">查看详情</el-button>
-          </template>
+          <!--<template slot-scope="scope">-->
+            <!--<el-button class="deepbluebtn" type="primary" size="small" style="margin-top: 10px" @click="handleOpen(scope.row)">查看详情</el-button>-->
+          <!--</template>-->
         </el-table-column>
       </el-table>
-      <!--<el-pagination-->
-      <!--background-->
-      <!--@size-change="handleSizeChange"-->
-      <!--@current-change="handleCurrentChange"-->
-      <!--:current-page="tableParams.pageNum"-->
-      <!--:page-sizes="[10, 20, 30]"-->
-      <!--:page-size="tableParams.pageSize"-->
-      <!--layout="total, sizes, prev, pager, next, jumper"-->
-      <!--:total="paginationTotal">-->
-      <!--</el-pagination>-->
     </div>
-    <el-dialog title="答辩信息" class='editdia' width="500px" :visible.sync="topicDialog" :close-on-press-escape='false' :close-on-click-modal='false'>
-      <div class="diabody diascroll" style="height: 400px">
-        <div class="detail-row">
-          <div class="row-title">课题名称</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.topicname" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">学院</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.collegename" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">专业</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.major" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">答辩时间</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.alreadynum" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">答辩地点</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.createtime" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">答辩导师</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.topicname" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">小组成员</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.teachername" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">指导老师电话</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.teacherphone" :disabled="true"></el-input>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="diafoot flex">
-        <el-button type="primary" class="truebutton deepbluebtn"@click="closeDialog()">确定</el-button>
-        <!--<el-button type="info" class="cancelbtn" plain @click="closeDialog()">确定</el-button>-->
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-  import { topicSelect, studentSelect } from '@/api/student'
+  import { topicSelect, studentSelect,queryMessage } from '@/api/student'
 
   export default {
     data() {
@@ -115,8 +34,8 @@
     },
     methods: {
       getData() {
-        topicSelect(this.page - 1, this.size).then(res => {
-          this.tableData = res.data.data.content
+        queryMessage(this.getUserId()).then(res => {
+          this.tableData = res.data.data
         })
       },
       closeDialog() {
@@ -160,8 +79,11 @@
   @import '../../../styles/common';
 </style>
 <style rel="stylesheet/scss" lang="scss">
-  .select .cell{
+  .myArgument .cell{
     height: 60px;
     line-height: 60px;
+  }
+  .myArgument .el-table td, .el-table th{
+    padding: 0;
   }
 </style>

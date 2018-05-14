@@ -10,10 +10,13 @@
       </div>
       <div class="content bor4">
         <ul>
-          <li v-for="(item, index) in list" :key="index">
+          <li v-for="(item, index) in newsList" :key="index">
             <div class="flex messagebox">
-              <div class="title" @click="handleinfo()">{{item.title}}</div>
-              <div class="time">{{item.time}}</div>
+              <div class="title" @click="handleinfo(item)">{{item.noticetitle}}</div>
+              <div class="time flex">
+                <div style="margin-right:15px">{{item.createtime}}</div>
+                <el-button type="danger" v-if='deleteShow' plain class="delBTN" @click="deleteNews(item,$event)"><i class="iconfont icon-ico_delete"></i></el-button>
+              </div>
             </div>
           </li>
         </ul>
@@ -21,15 +24,15 @@
     </div>
     <div  v-if="!listshow" class="messagebox">
       <div class="back">
-        <el-button type="primary" plain class="deepbluebtn backbtn" @click="backtolist()"><i class="iconfont icon-ico_arrow_left"></i> 返回上一页</el-button>
+        <el-button type="primary" plain class="deepbluebtn backbtn" @click="backtolist()"><i class="iconfont icon-ico_arrow_left"></i> 返回列表</el-button>
       </div>
       <div class="messageinfo bor4">
-        <h2>{{data.title}}</h2>
+        <h2>{{data.noticetitle}}</h2>
         <div class="author">
-          {{data.author}}
+          {{data.username}}
         </div>
-        <div class="messagecontent" v-html="data.content"></div>
-        <div class="messagetime">{{data.time}}</div>
+        <div class="messagecontent" v-html="data.noticecontent"></div>
+        <div class="messagetime">{{data.createtime}}</div>
       </div>
     </div>
 
@@ -40,6 +43,7 @@
 
 <script>
 import Pagging from '../common/Pagging'
+import { noticeinfo, noticeDel } from '@/api/index'
 export default {
   data() {
     return {
@@ -69,21 +73,28 @@ export default {
           time: '2018-05-28 00:00:00'
         }
       ],
+      newsList: [],
       pageNum: 1,
       pageSize: 10,
       total: 0,
       listshow: true,
-      data: {
-        title: '关于今年2018届毕业生提前毕业的通知',
-        time: '2018-05-28 00:00:00',
-        author: '河南科技大学',
-        content:
-          '<p>这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容</p><p>这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容</p><p>这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容这是一段内容</p>'
-      }
+      data: {},
+      deleteShow: false
     }
   },
   components: { Pagging },
+  mounted() {
+    this.init()
+  },
   methods: {
+    init() {
+      this.getData()
+      if (this.$store.getters.roles[0] === 'manager') {
+        this.deleteShow = true
+      } else {
+        this.deleteShow = false
+      }
+    },
     handlePageSize(val) {
       this.pageSize = val
       this.getData()
@@ -92,13 +103,30 @@ export default {
       this.pageNum = val
       this.getData()
     },
-    getData() {},
+    getData() {
+      noticeinfo(this.pageNum - 1, this.pageSize).then(res => {
+        this.newsList = res.data.data.content
+        this.total = res.data.data.total
+      })
+    },
     openIssued() {},
-    handleinfo() {
+    handleinfo(val) {
       this.listshow = false
+      this.data = val
     },
     backtolist() {
       this.listshow = true
+      this.data = []
+    },
+    deleteNews(val, $event) {
+      if ($event.target.nodeName === 'BUTTON') {
+        $event.target.blur()
+      } else {
+        $event.target.parentNode.blur()
+      }
+      noticeDel(val.noticid).then(res => {
+        this.getData()
+      })
     }
   }
 }

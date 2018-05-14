@@ -20,3 +20,25 @@ export function getMajor(collegeid) {
     method: 'get'
   })
 }
+
+export function noticeinfo(pageNum, pageSize) {
+  return request({
+    url: `/notice/query?page=${pageNum}&size=${pageSize}`,
+    method: 'get'
+  })
+}
+
+export function noticeDel(noticeid) {
+  return request({
+    url: `/notice/delete?noticeid=${noticeid}`,
+    method: 'get'
+  })
+}
+
+export function noticeAdd(data) {
+  return request({
+    url: '/notice/insert',
+    method: 'post',
+    data: data
+  })
+}

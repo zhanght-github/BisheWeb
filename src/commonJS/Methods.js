@@ -24,7 +24,18 @@ let commonMethods = {
   uploadMiddleReport(studentid){
     let url = `${baseUrl}/middle/uploadreport?studentid=${studentid}`;
     return url
+  },
+// 上传初稿
+  uploadDraftReport(studentid){
+    let url = `${baseUrl}/defence/commitdraft?studentid=${studentid}`;
+    return url
+  },
+//上传定稿
+  uploadFinalizeReport(studentid){
+    let url = `${baseUrl}/defence/commitfinal?studentid=${studentid}`;
+    return url
   }
+
 
 }
 export default commonMethods
