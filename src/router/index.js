@@ -306,7 +306,7 @@ export const asyncRouterMap = [
             path: '',
             component: _import('student/topic/report'),
             name: 'topic',
-            meta: { title: '上传开题报告', icon: 'ico_game', noCache: true, role: ['student'] }
+            meta: { title: '开题报告', icon: 'ico_game', noCache: true, role: ['student'] }
           }
         ]
       }
@@ -336,13 +336,13 @@ export const asyncRouterMap = [
   {
     path: '/student/manage',
     component: Layout,
-    meta: { title: '论文管理', role: ['student'] },
+    meta: { title: '答辩管理', role: ['student'] },
     children: [
       {
         path: '/student/draft',
         component: _import('student/reportManage/draft'),
         name: 'topic',
-        meta: { title: '论文管理', icon: 'ico_game', role: ['student'] },
+        meta: { title: '答辩管理', icon: 'ico_game', role: ['student'] },
         children: [
           {
             path: '',
@@ -356,7 +356,7 @@ export const asyncRouterMap = [
         path: '/student/finalize',
         component: _import('student/reportManage/finalize'),
         name: 'topic',
-        meta: { title: '论文管理', icon: 'ico_game', role: ['student'] },
+        meta: { title: '答辩管理', icon: 'ico_game', role: ['student'] },
         children: [
           {
             path: '',
@@ -365,33 +365,33 @@ export const asyncRouterMap = [
             meta: { title: '论文定稿', icon: 'ico_game', noCache: true, role: ['student'] }
           }
         ]
+      },
+      {
+        path: '/student/myArgument',
+        component: _import('student/reportManage/myArgument'),
+        name: 'topic',
+        meta: { title: '答辩管理', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/reportManage/myArgument'),
+            name: 'topic',
+            meta: { title: '我的答辩', icon: 'ico_game', noCache: true, role: ['student'] }
+          }
+        ]
       }
     ]
   },
   {
     path: '/student/grade',
     component: Layout,
-    meta: { title: '评分答辩', role: ['student'] },
+    meta: { title: '成绩管理', role: ['student'] },
     children: [
-      {
-        path: '/student/myArgument',
-        component: _import('student/gradeManage/myArgument'),
-        name: 'topic',
-        meta: { title: '评分答辩', icon: 'ico_game', role: ['student'] },
-        children: [
-          {
-            path: '',
-            component: _import('student/gradeManage/myArgument'),
-            name: 'topic',
-            meta: { title: '我的答辩', icon: 'ico_game', noCache: true, role: ['student'] }
-          }
-        ]
-      },
       {
         path: '/student/argumentGrade',
         component: _import('student/gradeManage/argumentGrade'),
         name: 'topic',
-        meta: { title: '评分答辩', icon: 'ico_game', role: ['student'] },
+        meta: { title: '成绩管理', icon: 'ico_game', role: ['student'] },
         children: [
           {
             path: '',
@@ -401,6 +401,53 @@ export const asyncRouterMap = [
           }
         ]
       },
+    ]
+  },
+  {
+    path: '/student/greatReport',
+    component: Layout,
+    meta: {title: '优秀毕业生论文', role: ['student']},
+    children: [
+      {
+        path: '',
+        component: _import('student/greatReport/greatReport'),
+        name: 'topic',
+        meta: {title: '优秀毕业生论文', noCache: true, role: ['student']}
+      }]
+  },
+  {
+    path: '/student/exchange',
+    component: Layout,
+    meta: {title: '留言板', role: ['student']},
+    children: [
+      {
+        path: '/student/teacherList',
+        component: _import('student/exchange/teacherList'),
+        name: 'topic',
+        meta: { title: '留言板', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/exchange/teacherList'),
+            name: 'topic',
+            meta: { title: '教师列表', icon: 'ico_game', noCache: true, role: ['student'] }
+          }
+        ]
+      },
+      {
+        path: '/student/exchangeList',
+        component: _import('student/exchange/exchangeList'),
+        name: 'topic',
+        meta: { title: '留言板', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/exchange/exchangeList'),
+            name: 'topic',
+            meta: { title: '留言板', icon: 'ico_game', noCache: true, role: ['student'] }
+          }
+        ]
+      }
     ]
   },
   // 管理员

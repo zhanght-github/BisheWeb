@@ -1,31 +1,26 @@
 <template>
-  <div class="report">
+  <div class="greatReport">
     <div class="tableWrapper">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
         <el-table-column prop="topicname" label="课题名称" width="200" align="center"></el-table-column>
-        <el-table-column prop="openreportIspass" label="报告状态" align="center">
-          <template slot-scope="scope">
-            <span type="text" v-if="scope.row.openreportIspass===0">待审核</span>
-            <span type="text" v-if="scope.row.openreportIspass===1">审核通过</span>
-            <span type="text" v-if="scope.row.openreportIspass===-1">审核不通过</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="150" fixed="right">
+        <el-table-column prop="paperpath" label="论文名称" align="center"></el-table-column>
+        <el-table-column prop="studentname" label="学生姓名" width="200" align="center"></el-table-column>
+        <el-table-column label="操作" width="110" fixed="right">
           <template slot-scope="scope" >
-            <div>
-              <el-upload
-                class="upload-demo"
-                :action="uploadUrl"
-                :on-exceed="handleExceedContract"
-                :on-success="handleContractUpload"
-                :on-change="handleChange"
-                :show-file-lis="false"
-                :limit="1">
-                <el-button class="deepbluebtn" size="small" type="primary">上传</el-button>
-              </el-upload>
-            </div>
-            <a :href="downloadUrl" class="deepbluebtn downStyle" size="small">下载</a>
+            <!--<div>-->
+              <!--<el-upload-->
+                <!--class="upload-demo"-->
+                <!--:action="uploadUrl"-->
+                <!--:on-exceed="handleExceedContract"-->
+                <!--:on-success="handleContractUpload"-->
+                <!--:on-change="handleChange"-->
+                <!--:show-file-lis="false"-->
+                <!--:limit="1">-->
+                <!--<el-button class="deepbluebtn" size="small" type="primary">上传</el-button>-->
+              <!--</el-upload>-->
+            <!--</div>-->
+            <a :href="downloadUrl" class="deepbluebtn downStyle" size="small">下载论文</a>
           </template>
         </el-table-column>
       </el-table>
@@ -34,7 +29,7 @@
 </template>
 
 <script>
-  import { literatureList, studentSelect } from '@/api/student'
+  import { literatureList, studentSelect, checkGreat } from '@/api/student'
   import CMethods from '../../../commonJS/Methods'
   export default {
     data() {
@@ -46,17 +41,19 @@
         tableData: [],
         showData: {},
         downloadUrl:'',
-        uploadUrl:''
+        uploadUrl:'',
+        name:''
       }
     },
     methods: {
       getData() {
-        literatureList(this.getUserId()).then(res => {
-          this.tableData = res.data.data;
-          this.topicname = res.data.data[0].topicname;
-          this.filename = res.data.data[0].openreportPath;
-          this.downloadUrl = CMethods.spliceDownloadUrl(this.topicname,this.filename);
-          this.uploadUrl = CMethods.uploadreport(this.getUserId());
+        checkGreat(2).then(res => {
+          this.tableData = res.data.data.content;
+          // this.tableData.paperpath = this.tableData[0].paperpath.replace(".doc","")
+          // console.log(this.tableData.paperpath)
+          this.name = res.data.data.content[0].topicname;
+          this.filename = res.data.data.content[0].paperpath;
+          this.downloadUrl = CMethods.spliceDownloadUrl(this.name,this.filename);
         });
 
       },
@@ -104,8 +101,8 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import '../../../styles/common';
-  .downStyle{
-    width: 55px;
+  .greatReport .downStyle{
+    width: 73px;
     height: 40px;
     border-radius: 2px;
     text-align: center;
@@ -115,21 +112,21 @@
   }
 </style>
 <style rel="stylesheet/scss" lang="scss">
-  .report .cell{
+  .greatReport .cell{
     line-height: 60px;
     height: 60px;
   }
-  .report .el-upload-list.el-upload-list--text{
+  .greatReport .el-upload-list.el-upload-list--text{
     display: none;
   }
-  .report .cell .downStyle{
+  .greatReport .cell .downStyle{
     float: right;
-    margin-top: 11px;
+    margin: 11px;
   }
-  .report .cell .upload-demo{
+  .greatReport .cell .upload-demo{
     float: left;
   }
-  .report .el-table td, .el-table th{
+  .greatReport .el-table td, .el-table th{
     padding: 0;
   }
 </style>
