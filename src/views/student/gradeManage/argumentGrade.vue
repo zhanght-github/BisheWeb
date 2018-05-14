@@ -1,16 +1,16 @@
 <template>
-  <div class="select">
+  <div class="argumentGrade">
     <div class="tableWrapper">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
         <el-table-column prop="topicname" label="课题名称" width="150" align="center"></el-table-column>
-        <el-table-column prop="topicsource" label="答辩时间" width="150" align="center"></el-table-column>
-        <el-table-column prop="teachername" label="答辩地点" width="150" align="center"></el-table-column>
-        <el-table-column prop="topictype" label="答辩导师" align="center"></el-table-column>
-        <el-table-column prop="topictype" label="答辩成绩" width="100" align="center"></el-table-column>
+        <el-table-column prop="teachername" label="答辩导师" align="center"></el-table-column>
+        <el-table-column prop="paperpath" label="论文名称" align="center"></el-table-column>
+        <el-table-column prop="studentname" label="学生姓名" align="center"></el-table-column>
+        <el-table-column prop="paperscore" label="答辩成绩" width="100" align="center"></el-table-column>
         <el-table-column label="操作" width="150" fixed="right">
           <template slot-scope="scope">
-            <el-button type="primary" size="small" style="margin-top: 10px" @click="handleOpen(scope.row)">查看详情</el-button>
+            <el-button type="primary" size="small" style="margin-top: 10px" @click="openSuggest(scope.row)">查看评语</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -77,7 +77,7 @@
 </template>
 
 <script>
-  import { topicSelect, studentSelect } from '@/api/student'
+  import { topicSelect, studentSelect,gradeMessage } from '@/api/student'
 
   export default {
     data() {
@@ -92,8 +92,8 @@
     },
     methods: {
       getData() {
-        topicSelect(this.page - 1, this.size).then(res => {
-          this.tableData = res.data.data.content
+        gradeMessage(this.getUserId()).then(res => {
+          this.tableData = res.data.data
         })
       },
       closeDialog() {
@@ -105,6 +105,21 @@
           this.showData = JSON.parse(JSON.stringify(data))
           this.showData.schedule = this.showData.schedule.replace(/<br>/g, '\n');
           this.showData.topiccontent = this.showData.topiccontent.replace(/<br>/g, '\n')
+        }
+      },
+      openSuggest(val) {
+        if (val.suggest) {
+          this.$confirm(`${val.suggest}`, '审核意见', {
+            confirmButtonText: '好的',
+            customClass: 'blueMessage',
+            showCancelButton: false
+          })
+        } else {
+          this.$confirm('暂无意见', '审核意见', {
+            confirmButtonText: '好的',
+            customClass: 'blueMessage',
+            showCancelButton: false
+          })
         }
       },
       handleSelect(id, name) {
@@ -137,8 +152,11 @@
   @import '../../../styles/common';
 </style>
 <style rel="stylesheet/scss" lang="scss">
-  .select .cell{
+  .argumentGrade .cell{
     height: 60px;
     line-height: 60px;
+  }
+  .argumentGrade .el-table td, .el-table th{
+    padding: 0;
   }
 </style>

@@ -17,14 +17,25 @@ let commonMethods = {
   },
 //  上传开题报告
   uploadreport(studentid){
-    let url = `${baseUrl}/open/uploadwenxian?studentid=${studentid}`;
+    let url = `${baseUrl}/open/uploadreport?studentid=${studentid}`;
     return url
   },
 //  上传中检报告
   uploadMiddleReport(studentid){
     let url = `${baseUrl}/middle/uploadreport?studentid=${studentid}`;
     return url
+  },
+// 上传初稿
+  uploadDraftReport(studentid){
+    let url = `${baseUrl}/defence/commitdraft?studentid=${studentid}`;
+    return url
+  },
+//上传定稿
+  uploadFinalizeReport(studentid){
+    let url = `${baseUrl}/defence/commitfinal?studentid=${studentid}`;
+    return url
   }
+
 
 }
 export default commonMethods

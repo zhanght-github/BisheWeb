@@ -1,5 +1,5 @@
 <template>
-  <div class="select">
+  <div class="middleCheck">
     <div class="tableWrapper">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
@@ -7,14 +7,14 @@
         <el-table-column prop="namelist" label="评阅老师" align="center"></el-table-column>
         <el-table-column prop="groupid" label="组别" width="200" align="center"></el-table-column>
         <el-table-column prop="topictype" label="中检成绩" width="200" align="center"></el-table-column>
-        <el-table-column label="操作" width="180" fixed="right">
+        <el-table-column label="操作" width="200" fixed="right">
           <template slot-scope="scope" >
-            <el-button style="float: left;margin-top: 10px" type="primary" size="small" class="deepbluebtn" @click="handleOpen(scope.row)">查看中检意见</el-button>
+            <el-button style="float: left;margin: 10px 0 0 10px" type="primary" size="small" class="deepbluebtn" @click="handleOpen(scope.row)">查看中检意见</el-button>
             <div>
               <el-upload
                 :action="uploadURL"
                 multiple
-                style="float: right"
+                style="float: right;margin-right: 10px"
                 :before-upload="handleContractBefore"
                 :on-exceed="handleExceedContract"
                 :on-success="handleContractUpload"
@@ -149,7 +149,14 @@
   @import '../../../styles/common';
 </style>
 <style rel="stylesheet/scss" lang="scss">
-  .select .cell{
+  .middleCheck .cell{
     line-height: 60px;
+    padding: 0;
+  }
+  .middleCheck .el-upload-list.el-upload-list--text{
+    display: none;
+  }
+  .middleCheck .el-table td, .el-table th{
+    padding: 0;
   }
 </style>

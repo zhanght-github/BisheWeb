@@ -40,7 +40,7 @@
     <!--</div>-->
   </div>
   <div class="footer" v-if="this.taskbookIsconfirm !== 1">
-    <el-button type="primary" @click="submitData()">确认</el-button>
+    <el-button type="primary" @click="submitData()" v-if="this.buttonShow !== 1">确认</el-button>
   </div>
 </div>
 </template>

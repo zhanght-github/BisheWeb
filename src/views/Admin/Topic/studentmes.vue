@@ -1,6 +1,9 @@
 <template>
   <div class="select">
     <div class="tableWrapper">
+      <div>
+        <el-button type="primary" class="truebutton deepbluebtn" @click="closeDialog()">添加学生</el-button>
+      </div>
       <el-table :data="stuData" border style="width: 100%" v-loading="loading">
         <el-table-column
           prop="username"
@@ -41,113 +44,80 @@
           width="300">
           <template slot-scope="scope" >
             <el-button type="success" size="small" @click="handleOpen(scope.row)">修改</el-button>
-            <el-button type="danger" size="small" >删除</el-button>
+            <el-button type="danger" size="small" @click="handleDele(scope.row.userid)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    el
-      <el-dialog title="查看课题信息" class='editdia' width="500px" :visible.sync="topicDialog" :close-on-press-escape='true' :close-on-click-modal='false'>
+    <el-dialog title="查看课题信息" class='editdia' width="500px" :visible.sync="topicDialog" :close-on-press-escape='false' :close-on-click-modal='false'>
       <div class="diabody diascroll" style="height: 400px">
         <div class="detail-row">
-          <div class="row-title">课题名称</div>
+          <div class="row-title">学生姓名</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input v-model="showData.topicname"></el-input>
+              <el-input v-model="showData.username"></el-input>
             </span>
           </div>
         </div>
         <div class="detail-row">
-          <div class="row-title">课题内容</div>
+          <div class="row-title">学生学院</div>
           <div class="row-content">
-             <span>
-              <el-input type="textarea" v-model="showData.topiccontent"></el-input>
+            <span class="input-wrapper">
+              <el-select v-model="college" @change="getMajor" class="selectDown">
+              <el-option
+                v-for="(item,index) in collegeList"
+                :key="index"
+                :label="item.collegename"
+                :value="item.collegeid">
+              </el-option>
+            </el-select>
             </span>
           </div>
         </div>
         <div class="detail-row">
-          <div class="row-title">选题总人数</div>
+          <div class="row-title">学生专业</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input v-model="showData.supplynum"></el-input>
+              <el-select v-model="showData.major" class="selectDown">
+              <el-option
+                v-for="(item,index) in majorList"
+                :key="index"
+                :label="item.majorname"
+                :value="item.majorname">
+              </el-option>
+            </el-select>
+            </span>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="row-title">学生学号</div>
+          <div class="row-content">
+            <span class="input-wrapper">
+              <el-input v-model="showData.userid"></el-input>
             </span>
           </div>
         </div>
         <div class="detail-row">
-          <div class="row-title">已选人数</div>
+          <div class="row-title">学生密码</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input v-model="showData.alreadynum"></el-input>
+              <el-input v-model="showData.userpassword"></el-input>
             </span>
           </div>
         </div>
         <div class="detail-row">
-          <div class="row-title">选题时间</div>
+          <div class="row-title">学生电话</div>
           <div class="row-content">
             <span class="input-wrapper">
-              <el-input v-model="showData.createtime"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">指导教师</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.topicname"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">课题类型</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.teachername"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">课题来源</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.topicsource"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">指导老师电话</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.teacherphone"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">日程安排</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input type="textarea" v-model="showData.schedule"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">学院</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.collegename"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="row-title">专业</div>
-          <div class="row-content">
-            <span class="input-wrapper">
-              <el-input v-model="showData.major"></el-input>
+              <el-input v-model="showData.userphone"></el-input>
             </span>
           </div>
         </div>
       </div>
       <div class="diafoot flex">
-        <el-button type="primary" class="truebutton deepbluebtn"@click="closeDialog()">确定</el-button>
+        <el-button type="primary" class="truebutton deepbluebtn"  @click="editbtn()">保存</el-button>
+        <el-button type="info" class="cancelbtn" @click="closeDialog()">取消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -155,7 +125,9 @@
 
 <script>
   import { topicSelect, studentSelect } from '@/api/student'
-  import { getteacher } from '@/api/admin'
+  import { getteacher, deleteuser } from '@/api/admin'
+  import { register } from '@/api/login'
+  import { getCollege, getMajor } from '@/api/index'
 
   export default {
     data() {
@@ -165,36 +137,101 @@
         loading: false,
         topicDialog: false,
         tableData: [],
-        showData: {},
-        stuData: []
+        tablesData: [],
+        college:null,
+        showData: {
+          username: "",
+          userid: "",
+          userpassword: "",
+          userphone: "",
+          collegeid: "",
+          collegename: "",
+          major: "",
+          role: 0
+        },
+        stuData: [],
+        collegeList: [],
+        majorList: []
       }
     },
     methods: {
-      getData() {
-        topicSelect(this.page - 1, this.size).then(res => {
-          this.tableData = res.data.data.content
+      getteacher() {
+        getteacher(this.page-1, this.size, 0, this.getUsers().collegeid).then(res => {
+          this.stuData = res.data.data.content
         })
       },
-      getteacher() {
-        getteacher(0, 10, 0, 1).then(res => {
-          this.stuData = res.data.data.content
+      reset(){
+        this.showData= {
+          username: "",
+            userid: "",
+            userpassword: "",
+            userphone: "",
+            collegeid: "",
+            collegename: "",
+            major: "",
+            role: 0
+        }
+        this.majorList = []
+        this.college = null
+      },
+      editbtn(){
+        register(this.showData).then(res => {
+          this.topicDialog = false
+          this.reset()
+          this.getteacher()
         })
       },
       closeDialog() {
         this.topicDialog = !this.topicDialog
+        this.showData= {
+          username: "",
+          userid: "",
+          userpassword: "",
+          userphone: "",
+          collegeid: "",
+          collegename: "",
+          major: "",
+          role: 0
+        }
+        this.majorList = []
+        this.college = null
       },
       handleOpen(data) {
         this.topicDialog = !this.topicDialog
         if (data !== undefined) {
           this.showData = JSON.parse(JSON.stringify(data))
-          this.showData.schedule = this.showData.schedule.replace(/<br>/g, '\n')
-          this.showData.topiccontent = this.showData.topiccontent.replace(/<br>/g, '\n')
+          this.college = data.collegeid
+          getMajor(data.collegeid).then(res => {
+            this.majorList = res.data.data
+          })
         }
       },
+      handleDele(id) {
+        deleteuser(id).then(res=>{
+          this.getteacher()
+        })
+      },
+      getCollege(){
+        getCollege().then(res=>{
+          this.collegeList = res.data.data
+        })
+      },
+      getMajor(val){
+        this.showData.collegeid = val
+        this.collegeList.forEach(item=>{
+          if(item.collegeid === val){
+            this.showData.collegename = item.collegename
+          }
+        })
+        getMajor(val).then(res => {
+          this.majorList = res.data.data
+        })
+      }
     },
     created() {
-      this.getData()
+//      this.getData()
       this.getteacher()
+      this.getCollege()
     }
   }
 </script>

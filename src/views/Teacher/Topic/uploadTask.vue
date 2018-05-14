@@ -41,7 +41,6 @@
                 <span class="notAllowed result">未上传文档</span >
               </div>
             </div>
-
             </template>
           </el-table-column>
           <el-table-column

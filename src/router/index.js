@@ -328,7 +328,7 @@ export const asyncRouterMap = [
             path: '',
             component: _import('student/topic/report'),
             name: 'topic',
-            meta: { title: '上传开题报告', icon: 'ico_game', noCache: true, role: ['student'] }
+            meta: { title: '开题报告', icon: 'ico_game', noCache: true, role: ['student'] }
           }
         ]
       }
@@ -358,13 +358,13 @@ export const asyncRouterMap = [
   {
     path: '/student/manage',
     component: Layout,
-    meta: { title: '论文管理', role: ['student'] },
+    meta: { title: '答辩管理', role: ['student'] },
     children: [
       {
         path: '/student/draft',
         component: _import('student/reportManage/draft'),
         name: 'topic',
-        meta: { title: '论文管理', icon: 'ico_game', role: ['student'] },
+        meta: { title: '答辩管理', icon: 'ico_game', role: ['student'] },
         children: [
           {
             path: '',
@@ -378,7 +378,7 @@ export const asyncRouterMap = [
         path: '/student/finalize',
         component: _import('student/reportManage/finalize'),
         name: 'topic',
-        meta: { title: '论文管理', icon: 'ico_game', role: ['student'] },
+        meta: { title: '答辩管理', icon: 'ico_game', role: ['student'] },
         children: [
           {
             path: '',
@@ -387,33 +387,33 @@ export const asyncRouterMap = [
             meta: { title: '论文定稿', icon: 'ico_game', noCache: true, role: ['student'] }
           }
         ]
+      },
+      {
+        path: '/student/myArgument',
+        component: _import('student/reportManage/myArgument'),
+        name: 'topic',
+        meta: { title: '答辩管理', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/reportManage/myArgument'),
+            name: 'topic',
+            meta: { title: '我的答辩', icon: 'ico_game', noCache: true, role: ['student'] }
+          }
+        ]
       }
     ]
   },
   {
     path: '/student/grade',
     component: Layout,
-    meta: { title: '评分答辩', role: ['student'] },
+    meta: { title: '成绩管理', role: ['student'] },
     children: [
-      {
-        path: '/student/myArgument',
-        component: _import('student/gradeManage/myArgument'),
-        name: 'topic',
-        meta: { title: '评分答辩', icon: 'ico_game', role: ['student'] },
-        children: [
-          {
-            path: '',
-            component: _import('student/gradeManage/myArgument'),
-            name: 'topic',
-            meta: { title: '我的答辩', icon: 'ico_game', noCache: true, role: ['student'] }
-          }
-        ]
-      },
       {
         path: '/student/argumentGrade',
         component: _import('student/gradeManage/argumentGrade'),
         name: 'topic',
-        meta: { title: '评分答辩', icon: 'ico_game', role: ['student'] },
+        meta: { title: '成绩管理', icon: 'ico_game', role: ['student'] },
         children: [
           {
             path: '',
@@ -423,6 +423,53 @@ export const asyncRouterMap = [
           }
         ]
       },
+    ]
+  },
+  {
+    path: '/student/greatReport',
+    component: Layout,
+    meta: {title: '优秀毕业生论文', role: ['student']},
+    children: [
+      {
+        path: '',
+        component: _import('student/greatReport/greatReport'),
+        name: 'topic',
+        meta: {title: '优秀毕业生论文', noCache: true, role: ['student']}
+      }]
+  },
+  {
+    path: '/student/exchange',
+    component: Layout,
+    meta: {title: '留言板', role: ['student']},
+    children: [
+      {
+        path: '/student/teacherList',
+        component: _import('student/exchange/teacherList'),
+        name: 'topic',
+        meta: { title: '留言板', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/exchange/teacherList'),
+            name: 'topic',
+            meta: { title: '教师列表', icon: 'ico_game', noCache: true, role: ['student'] }
+          }
+        ]
+      },
+      {
+        path: '/student/exchangeList',
+        component: _import('student/exchange/exchangeList'),
+        name: 'topic',
+        meta: { title: '留言板', icon: 'ico_game', role: ['student'] },
+        children: [
+          {
+            path: '',
+            component: _import('student/exchange/exchangeList'),
+            name: 'topic',
+            meta: { title: '留言板', icon: 'ico_game', noCache: true, role: ['student'] }
+          }
+        ]
+      }
     ]
   },
   // 管理员
@@ -444,32 +491,32 @@ export const asyncRouterMap = [
   {
     path: '/admin/manger',
     component: Layout,
-    meta: { title: '管理员信息', role: ['manger'] },
+    meta: { title: '管理员信息', role: ['manager'] },
     children: [
       {
         path: '',
         component: _import('Admin/manger/index'),
         name: 'topic',
-        meta: { title: '管理员信息', noCache: true, role: ['manger'] }
+        meta: { title: '管理员信息', noCache: true, role: ['manager'] }
       }
     ]
   },
   {
     path: '/admin',
     component: Layout,
-    meta: { title: '查看个人信息', role: ['manger'] },
+    meta: { title: '查看个人信息', role: ['manager'] },
     children: [
       {
         path: '/admin/personalmes',
         component: _import('Admin/Topic/studentmes'),
         name: 'topic',
-        meta: { title: '学生信息', icon: 'icon-ico_goodie', role: ['manger'] },
+        meta: { title: '学生信息', icon: 'icon-ico_goodie', role: ['manager'] },
         children: [
           {
             path: '',
             component: _import('Admin/Topic/studentmes'),
             name: 'topic',
-            meta: { title: '学生信息', icon: 'icon-ico_goodie', noCache: true, role: ['manger'] }
+            meta: { title: '学生信息', icon: 'icon-ico_goodie', noCache: true, role: ['manager'] }
           }
         ]
       },
@@ -477,90 +524,97 @@ export const asyncRouterMap = [
         path: '/admin/teachermes',
         component: _import('Admin/Topic/teachermes'),
         name: 'topic',
-        meta: { title: '教师信息', icon: 'icon-ico_goodie', role: ['manger'] },
+        meta: { title: '教师信息', icon: 'icon-ico_goodie', role: ['manager'] },
         children: [
           {
             path: '',
             component: _import('Admin/Topic/teachermes'),
             name: 'topic',
-            meta: { title: '教师信息', icon: 'icon-ico_goodie', noCache: true, role: ['manger'] }
+            meta: { title: '教师信息', icon: 'icon-ico_goodie', noCache: true, role: ['manager'] }
           }
         ]
       }
     ]
   },
   {
-    path: '/admin',
+    path: '/admin1',
     component: Layout,
-    meta: { title: '毕设题目', role: ['manger'] },
+    meta: { title: '毕设题目', role: ['manager'] },
     children: [
       {
-        path: '/admin/bishesubject',
+        path: '/admin1/bishesubject',
         component: _import('Admin/Topic/bishesubject'),
         name: 'topic',
-        meta: { title: '毕设题目信息', icon: 'icon-ico_goodie', role: ['manger'] },
+        meta: { title: '毕设题目信息', icon: 'icon-ico_goodie', role: ['manager'] },
         children: [
           {
             path: '',
             component: _import('Admin/Topic/bishesubject'),
             name: 'topic',
-            meta: { title: '毕设题目信息', icon: 'icon-ico_goodie', noCache: true, role: ['manger'] }
+            meta: { title: '毕设题目信息', icon: 'icon-ico_goodie', noCache: true, role: ['manager'] }
           }
         ]
       },
       {
-        path: '/admin/bishegrouping',
+        path: '/admin1/bishegrouping',
         component: _import('Admin/Topic/bishegrouping'),
         name: 'topic',
-        meta: { title: '毕设中检分组', icon: 'icon-ico_goodie', role: ['manger'] },
+        meta: { title: '毕设中检分组', icon: 'icon-ico_goodie', role: ['manager'] },
         children: [
           {
             path: '',
             component: _import('Admin/Topic/bishegrouping'),
             name: 'topic',
-            meta: { title: '毕设中检分组', icon: 'icon-ico_goodie', noCache: true, role: ['manger'] }
+            meta: { title: '毕设中检分组', icon: 'icon-ico_goodie', noCache: true, role: ['manager'] }
           }
         ]
-      }
-    ]
-  },
-  {
-    path: '/admin',
-    component: Layout,
-    meta: { title: '毕业设计进度', role: ['manger'] },
-    children: [
+      },
       {
-        path: '/admin/bisheprocess',
-        component: _import('Admin/Topic/bisheprocess'),
+        path: '/admin1/bishedefence',
+        component: _import('Admin/Topic/bishedefence'),
         name: 'topic',
-        meta: { title: '毕业设计进度', icon: 'icon-ico_goodie', role: ['manger'] },
+        meta: { title: '毕设答辩分组', icon: 'icon-ico_goodie', role: ['manager'] },
         children: [
           {
             path: '',
-            component: _import('Admin/Topic/bisheprocess'),
+            component: _import('Admin/Topic/bishedefence'),
             name: 'topic',
-            meta: { title: '毕设题目进度', icon: 'icon-ico_goodie', noCache: true, role: ['manger'] }
+            meta: { title: '毕设答辩分组', icon: 'icon-ico_goodie', noCache: true, role: ['manager'] }
           }
         ]
       }
     ]
   },
   {
-    path: '/admin',
+    path: '/admin3',
     component: Layout,
-    meta: { title: '毕业设计成绩', role: ['manger'] },
+    meta: { title: '毕业设计成绩', role: ['manager'] },
     children: [
       {
-        path: '/admin/bishescore',
-        component: _import('Admin/Topic/bishescore'),
+        path: '/admin3/bisheexcellent',
+        component: _import('Admin/Topic/bisheexcellent'),
         name: 'topic',
-        meta: { title: '毕业设计成绩', icon: 'icon-ico_goodie', role: ['manger'] },
+        meta: { title: '毕业设计评优', icon: 'icon-ico_goodie', role: ['manager'] },
         children: [
           {
             path: '',
             component: _import('Admin/Topic/bishescore'),
             name: 'topic',
-            meta: { title: '毕业设计成绩', icon: 'icon-ico_goodie', noCache: true, role: ['manger'] }
+            meta: { title: '毕业设计评优', icon: 'icon-ico_goodie', noCache: true, role: ['manager'] }
+          }
+        ]
+      },
+      {
+        path: '/admin3/bishescore',
+        component: _import('Admin/Topic/bishescore'),
+        name: 'topic',
+        meta: { title: '毕业设计成绩', icon: 'icon-ico_goodie', role: ['manager'] },
+        children: [
+          {
+            path: '',
+            component: _import('Admin/Topic/bishescore'),
+            name: 'topic',
+            meta: { title: '毕业设计成绩', icon: 'icon-ico_goodie', noCache: true, role: ['manager'] }
           }
         ]
       }

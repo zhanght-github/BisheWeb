@@ -1,5 +1,5 @@
 <template>
-  <div class="select">
+  <div class="literature">
     <div class="tableWrapper">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="100" align="center"></el-table-column>
@@ -13,7 +13,7 @@
         </el-table-column>
         <el-table-column prop="wenxianScore" label="分数" align="center"></el-table-column>
         <el-table-column prop="teachername" label="评阅老师" width="150" align="center"></el-table-column>
-        <el-table-column label="操作" fixed="right">
+        <el-table-column label="操作" fixed="right" width="200px">
           <template slot-scope="scope" >
             <el-button style="float: left;margin: 10px" class="deepbluebtn" type="primary" size="small" @click="handleOpen(scope.row)">查看</el-button>
             <div>
@@ -128,4 +128,23 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import '../../../styles/common';
+</style>
+<style rel="stylesheet/scss" lang="scss">
+  .literature .cell{
+    line-height: 60px;
+    height: 60px;
+  }
+  .literature .el-upload-list.el-upload-list--text{
+    display: none;
+  }
+  .literature .cell .downStyle{
+    float: right;
+    margin-top: 11px;
+  }
+  .literature .cell .upload-demo{
+    float: left;
+  }
+  .literature .el-table td, .el-table th{
+    padding: 0;
+  }
 </style>
