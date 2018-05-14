@@ -42,19 +42,6 @@ export const constantRouterMap = [
 
 export const asyncRouterMap = [
   {
-    path: '/teacher/teacherInfo',
-    component: Layout,
-    meta: { title: '教师信息', role: ['teacher'] },
-    children: [
-      {
-        path: '',
-        component: _import('Teacher/TeacherInfo/Index'),
-        name: 'topic',
-        meta: { title: '教师信息', noCache: true, role: ['teacher'] }
-      }
-    ]
-  },
-  {
     path: '/teacher',
     component: Layout,
     meta: { title: '课题管理', role: ['teacher'] },
@@ -236,15 +223,50 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/teacherRecommend/recommendPaper',
+    path: '/teacherRecommend',
     component: Layout,
-    meta: { title: '论文推优', role: ['teacher'] },
+    meta: { title: '推优管理', role: ['teacher'] },
+    children: [
+      {
+        path: '/teacherRecommend/recommendPaper',
+        component: _import('Teacher/RecommendPaper/Index'),
+        name: 'recommendPaper',
+        meta: { title: '论文推优', icon: 'icon-ico_goodie', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/RecommendPaper/Index'),
+            name: 'recommendPaper',
+            meta: { title: '论文推优', icon: 'icon-ico_goodie', noCache: true, role: ['teacher'] }
+          }
+        ]
+      },
+      {
+        path: '/teacherRecommend/oldPaper',
+        component: _import('Teacher/RecommendPaper/OldPaper'),
+        name: 'oldPaper',
+        meta: { title: '优秀论文', icon: 'icon-ico_goodie', role: ['teacher'] },
+        children: [
+          {
+            path: '',
+            component: _import('Teacher/RecommendPaper/OldPaper'),
+            name: 'oldPaper',
+            meta: { title: '优秀论文', icon: 'icon-ico_goodie', noCache: true, role: ['teacher'] }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/teacherMessage',
+    component: Layout,
+    meta: { title: '留言板', role: ['teacher'] },
     children: [
       {
         path: '',
-        component: _import('Teacher/RecommendPaper/Index'),
-        name: 'recommendPaper',
-        meta: { title: '论文推优', noCache: true, role: ['teacher'] }
+        component: _import('Teacher/Message/Index'),
+        name: 'Message',
+        meta: { title: '留言板', noCache: true, role: ['teacher'] }
       }
     ]
   },

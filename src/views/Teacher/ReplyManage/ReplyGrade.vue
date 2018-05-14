@@ -2,34 +2,57 @@
 <template>
   <div class="ReplyGrade">
     <el-table
-        :data="list"
+        :data="dataList"
         style="width: 100%">
          <el-table-column
-          property="keti"
+          property="topicname"
           label="课题名称"
           width="250">
           </el-table-column>
           <el-table-column
-          property="name"
+          property="studentname"
           label="选题学生"
           width="100">
           </el-table-column>
           <el-table-column
-          property="ID"
+          property="studentid"
           label="学生学号">
           </el-table-column>
           <el-table-column
-          property="zhuanye"
-          label="学生专业">
+          label="论文评分">
+            <template slot-scope="scope">
+              <div>
+                <span v-if='scope.row.paperscore'>{{scope.row.paperscore}}</span>
+                <span v-if='!scope.row.paperscore'>未评分</span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+          label="答辩评分">
+            <template slot-scope="scope">
+              <div>
+                <span v-if='scope.row.defencescore'>{{scope.row.defencescore}}</span>
+                <span v-if='!scope.row.defencescore'>未评分</span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+          label="总体评分">
+            <template slot-scope="scope">
+              <div>
+                <span v-if='scope.row.totalscore'>{{scope.row.totalscore}}</span>
+                <span v-if='!scope.row.totalscore'>未评分</span>
+              </div>
+            </template>
           </el-table-column>
           <el-table-column
           label="操作"
           width="240">
             <template slot-scope="scope">
-              <div v-if='scope.row.status == 0' class="handle">
+              <div v-if='!scope.row.totalscore'  class="handle">
                 <el-button type="primary" plain class="deepbluebtn" @click="openGrade(scope.row)">评分</el-button>
               </div>
-              <div v-if='scope.row.status == 1' class="handle">
+              <div v-if='scope.row.totalscore' class="handle">
                 <el-button type="primary" plain class="deepbluebtn" @click="openGrade(scope.row)">重新评分</el-button>
               </div>
             </template>
@@ -39,8 +62,16 @@
     <el-dialog class='editdia uploadDia' title="答辩评分" width="600px" :visible.sync="gradedia" :close-on-press-escape='false' :close-on-click-modal='false'>
       <div class="diabody">
         <div class="infobox">
-          <div class="label">评分</div>
-          <el-input :autosize='false' v-model="updataData.score" class="inputname" placeholder="输入分数"></el-input>
+          <div class="label">论文评分</div>
+          <el-input v-model="updataData.paperscore" class="inputname" placeholder="输入分数"></el-input>
+        </div>
+        <div class="infobox">
+          <div class="label">答辩评分</div>
+          <el-input v-model="updataData.defencescore" class="inputname" placeholder="输入分数"></el-input>
+        </div>
+        <div class="infobox">
+          <div class="label">总体评分</div>
+          <el-input v-model="updataData.totalscore" class="inputname" placeholder="输入分数"></el-input>
         </div>
       </div>
       <div class="diafoot flex">
@@ -52,6 +83,7 @@
 </template>
 
 <script>
+import { setScore, getScoreList } from '@/api/teacher'
 export default {
   data() {
     return {
@@ -86,16 +118,48 @@ export default {
       ],
       gradedia: false,
       updataData: {
-        score: null
-      }
+        paperscore: null,
+        defencescore: null,
+        totalscore: null,
+        studentid: null
+      },
+      pageNum: 1,
+      pageSize: 10,
+      total: null,
+      dataList: []
     }
   },
+  mounted() {
+    this.getData()
+  },
   methods: {
+    getData() {
+      getScoreList(this.pageNum - 1, this.pageSize, this.getUserId()).then(res => {
+        this.dataList = res.data.data.content
+        this.total = res.data.data.total
+      })
+    },
     openGrade(val) {
       this.gradedia = true
+      this.updataData.studentid = val.studentid
     },
     closebtn() {
       this.gradedia = false
+    },
+    reset() {
+      this.updataData = {
+        paperscore: null,
+        defencescore: null,
+        totalscore: null,
+        studentid: null
+      }
+    },
+    review() {
+      setScore(this.updataData).then(res => {
+        this.reset()
+        this.gradedia = false
+        this.getData()
+      })
     }
   }
 }

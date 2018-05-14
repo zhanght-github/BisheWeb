@@ -9,25 +9,32 @@
     <div class="content bor4">
       <div class="label">需检阅学生</div>
       <el-table
-        :data="list"
+        :data="checklist"
         style="width: 100%">
         <el-table-column
-          property="name"
+          property="studentname"
           label="学生名称"
           width="100">
           </el-table-column>
          <el-table-column
-          property="keti"
+          property="topicname"
           label="课题名称"
           width="250">
           </el-table-column>
           <el-table-column
-          property="ID"
+          property="studentid"
           label="学生学号">
           </el-table-column>
           <el-table-column
-          property="blong"
+          property="teachername"
           label="所属老师">
+          </el-table-column>
+          <el-table-column
+          label="文件">
+            <template slot-scope="scope">
+              <a  class="clickdoc doclabel" v-if='scope.row.middlereportPath' :href="scope.row.url">{{scope.row.middlereportPath}}</a>
+              <a  class="doclabel" v-if='!scope.row.middlereportPath' href="">未上传中检报告</a>
+            </template>
           </el-table-column>
           <el-table-column
           label="评阅意见">
@@ -39,11 +46,11 @@
           label="操作"
           width="240">
             <template slot-scope="scope">
-              <div v-if='scope.row.status == 0' class="handle">
-                <span class="allowed result">84分</span>
+              <div v-if='scope.row.middlecheckScore' class="handle">
+                <span class="allowed result">{{scope.row.middlecheckScore}}</span>
                 <el-button type="primary" plain class="deepbluebtn" @click="editIssued(scope.row)">重新评阅</el-button>
               </div>
-              <div v-if='scope.row.status == 1' class="handle">
+              <div v-if='!scope.row.middlecheckScore' class="handle">
                 <el-button type="primary" plain class="deepbluebtn" @click="openIssued(scope.row)">评阅</el-button>
               </div>
             </template>
@@ -54,11 +61,11 @@
       <div class="diabody">
         <div class="infobox">
           <div class="label">评分</div>
-          <el-input :autosize='false' v-model="updataData.score" class="inputname" placeholder="输入分数"></el-input>
+          <el-input :autosize='false' v-model="updataData.middlecheckScore" class="inputname" placeholder="输入分数"></el-input>
         </div>
         <div class="infobox">
           <div class="label">建议</div>
-          <el-input :autosize='false' type="textarea" v-model="updataData.suggest" class="inputname" placeholder="输入建议"></el-input>
+          <el-input :autosize='false' type="textarea" v-model="updataData.middlecheckSuggest" class="inputname" placeholder="输入建议"></el-input>
         </div>
       </div>
       <div class="diafoot flex">
@@ -71,7 +78,8 @@
 </template>
 
 <script>
-import { middleStudent } from '@/api/teacher'
+import { middleStudent, middleCheck } from '@/api/teacher'
+import CMethods from '../../../commonJS/Methods'
 export default {
   data() {
     return {
@@ -110,10 +118,12 @@ export default {
       isEdit: false,
       updataData: {
         studentid: null,
-        score: null,
-        suggest: null,
-        ispass: 1
-      }
+        middlecheckScore: null,
+        middlecheckSuggest: null,
+        middlecheckIspass: 1
+      },
+      checklist: [],
+      selectData: null
     }
   },
   mounted() {
@@ -122,7 +132,10 @@ export default {
   methods: {
     getData() {
       middleStudent(this.getUserId()).then(res => {
-        console.log(res)
+        this.checklist = res.data.data
+        this.checklist.forEach(item => {
+          item.url = CMethods.spliceDownloadUrl(item.topicname, item.middlereportPath)
+        })
       })
     },
     editIssued(val) {
@@ -130,10 +143,11 @@ export default {
     },
     openIssued(val) {
       this.Dialog = true
+      this.selectData = val
     },
     openSuggest(val) {
-      if (val.suggest) {
-        this.$confirm(`${val.suggest}`, '审核意见', {
+      if (val.middlecheckSuggest) {
+        this.$confirm(`${val.middlecheckSuggest}`, '审核意见', {
           confirmButtonText: '好的',
           customClass: 'blueMessage',
           showCancelButton: false
@@ -147,16 +161,30 @@ export default {
       }
     },
     reset() {
+      this.selectData = null
       this.updataData = {
         studentid: null,
         score: null,
         suggest: null,
-        ispass: 1
+        ispass: null
       }
     },
-    review() {},
+    review() {
+      this.updataData.studentid = this.selectData.studentid
+      if (parseInt(this.updataData.middlecheckScore) >= 60) {
+        this.updataData.middlecheckIspass = 1
+      } else {
+        this.updataData.middlecheckIspass = -1
+      }
+      middleCheck(this.updataData).then(res => {
+        this.getData()
+        this.Dialog = false
+        this.reset()
+      })
+    },
     closebtn() {
       this.Dialog = false
+      this.reset()
     }
   }
 }
@@ -185,6 +213,13 @@ export default {
 <style  rel="stylesheet/scss" lang="scss">
 @import 'src/styles/variables.scss';
 .CheckList {
+  .clickdoc {
+        text-decoration: underline;
+        &:hover {
+          cursor: pointer;
+          color: $fontblue;
+        }
+      }
   .el-table {
     .watchSuggest {
       text-decoration: underline;
@@ -210,6 +245,13 @@ export default {
       }
       .notAllowed {
         background-color: #b8b9c7;
+      }
+      .clickdoc {
+        text-decoration: underline;
+        &:hover {
+          cursor: pointer;
+          color: $fontblue;
+        }
       }
     }
   }

@@ -2,35 +2,31 @@
 <template>
   <div class="AdviserApprise">
     <el-table
-        :data="list"
+        :data="datalist"
         v-if="showTable"
         style="width: 100%">
          <el-table-column
-          property="keti"
+          property="topicname"
           label="课题名称"
           width="250">
           </el-table-column>
           <el-table-column
-          property="name"
+          property="studentname"
           label="选题学生"
           width="100">
           </el-table-column>
           <el-table-column
-          property="ID"
+          property="studentid"
           label="学生学号">
-          </el-table-column>
-          <el-table-column
-          property="zhuanye"
-          label="学生专业">
           </el-table-column>
            <el-table-column
           label="论文状态"
           width="240">
             <template slot-scope="scope">
                 <div class="handle">
-                  <span class="allowed result">初稿已提交</span>
-                  <span class="watchSuggest" @click="openPaper(scope.row)">查看论文</span>
-                  <span class="notAllowed result">初稿未提交</span>
+                  <span v-if='scope.row.paperdraftPath' class="allowed result">初稿已提交</span>
+                  <span v-if='scope.row.paperdraftPath' class="watchSuggest" @click="openPaper(scope.row)">查看论文</span>
+                  <span v-if='!scope.row.paperdraftPath' class="notAllowed result">初稿未提交</span>
                 </div>
             </template>
           </el-table-column>
@@ -38,12 +34,16 @@
           label="审阅状态"
           width="240">
             <template slot-scope="scope">
-              <div v-if='scope.row.status == 0' class="handle">
+              <div v-if='!scope.row.paperdraftIspass' class="handle">
+                <span class="notAllowed result">审阅老师暂未审阅</span>
+              </div>
+              <div v-if='scope.row.paperdraftIspass == 1' class="handle">
                 <span class="allowed result">通过</span>
                 <span class="watchSuggest" @click="openSuggest(scope.row)">查看意见</span>
               </div>
-              <div v-if='scope.row.status == 1' class="handle">
-                <span class="notAllowed result">审阅老师暂未审阅</span>
+              <div v-if='scope.row.paperdraftIspass == -1' class="handle">
+                <span class="notAllowed result">未通过</span>
+                <span class="watchSuggest" @click="openSuggest(scope.row)">查看意见</span>
               </div>
             </template>
           </el-table-column>
@@ -51,10 +51,10 @@
           label="操作"
           width="240">
             <template slot-scope="scope">
-              <div v-if='scope.row.status == 0' class="handle">
-                <el-button type="primary" plain class="deepbluebtn" @click="editIssued(scope.row)">审阅</el-button>
+              <div v-if='!scope.row.paperdraftIspass' class="handle">
+                <el-button  type="primary" plain class="deepbluebtn" @click="editIssued(scope.row)">审阅</el-button>
               </div>
-              <div v-if='scope.row.status == 1' class="handle">
+              <div v-if='scope.row.paperdraftIspass' class="handle">
                 <el-button type="primary" plain class="deepbluebtn" @click="editIssued(scope.row)">重新审阅</el-button>
               </div>
             </template>
@@ -96,7 +96,7 @@
           label="论文下载">
             <template slot-scope="scope">
                 <div class="handle">
-                  <a :href="scope.row.url">测试1.doc</a>
+                  <a class="clickdoc" :href="scope.row.url">测试1.doc</a>
                 </div>
             </template>
           </el-table-column>
@@ -107,9 +107,9 @@
       <div class="diabody">
         <div class="infobox">
           <div class="label">审核结果</div>
-          <el-radio-group v-model="updataData.score">
+          <el-radio-group v-model="updataData.ispass">
               <el-radio-button label="1" >通过</el-radio-button>
-              <el-radio-button label="0">不通过</el-radio-button>
+              <el-radio-button label="-1">不通过</el-radio-button>
             </el-radio-group>
         </div>
         <div class="infobox">
@@ -126,7 +126,8 @@
 </template>
 
 <script>
-import { topicInfo } from '@/api/teacher'
+import { topicInfo, defencelist, draftispass } from '@/api/teacher'
+import { studentAssign } from '@/api/student'
 import CMethods from '../../../commonJS/Methods'
 export default {
   data() {
@@ -165,32 +166,58 @@ export default {
       Dialog: false,
       updataData: {
         studentid: null,
-        score: 1,
         suggest: null,
         ispass: 1
-      }
+      },
+      pageNum: 1,
+      pageSize: 10,
+      total: null,
+      datalist: [],
+      selectData: null
     }
   },
+  mounted() {
+    this.getData()
+  },
   methods: {
+    getData() {
+      defencelist(this.pageNum - 1, this.pageSize, this.getUserId()).then(res => {
+        this.datalist = res.data.data.content
+        this.datalist.forEach(item => {
+          if (item.paperdraftPath) {
+            item.url = CMethods.spliceDownloadUrl(item.topicname, item.paperdraftPath)
+          }
+        })
+      })
+    },
     openPaper(val) {
       this.showTable = false
-      topicInfo('be0adaa8f7904324b08a121f58cd9124').then(res => {
-        res.data.data.url = CMethods.spliceDownloadUrl(res.data.data.topicname, '测试1')
-        this.topicInfo.push(res.data.data)
-      })
+      if (val.paperdraftPath) {
+        studentAssign(val.studentid).then(res => {
+          var ids = res.data.data.topicid
+          topicInfo(ids).then(res => {
+            res.data.data.url = CMethods.spliceDownloadUrl(res.data.data.topicname, val.paperdraftPath)
+            this.topicInfo.push(res.data.data)
+          })
+        })
+      } else {
+        this.topicInfo = []
+      }
     },
     backtolist() {
       this.showTable = true
+      this.topicInfo = []
     },
     editIssued(val) {
       this.Dialog = true
+      this.selectData = val
     },
     closebtn() {
       this.Dialog = false
     },
     openSuggest(val) {
-      if (val.suggest) {
-        this.$confirm(`${val.suggest}`, '审核意见', {
+      if (val.paperdraftSuggest) {
+        this.$confirm(`${val.paperdraftSuggest}`, '审核意见', {
           confirmButtonText: '好的',
           customClass: 'blueMessage',
           showCancelButton: false
@@ -202,6 +229,22 @@ export default {
           showCancelButton: false
         })
       }
+    },
+    reset() {
+      this.selectData = null
+      this.updataData = {
+        studentid: null,
+        suggest: null,
+        ispass: 1
+      }
+    },
+    review() {
+      this.updataData.studentid = this.selectData.studentid
+      draftispass(this.updataData.studentid, this.updataData.ispass, this.updataData.suggest).then(res => {
+        this.Dialog = false
+        this.reset()
+        this.getData()
+      })
     }
   }
 }
@@ -214,6 +257,13 @@ export default {
 <style  rel="stylesheet/scss" lang="scss">
 @import 'src/styles/variables.scss';
 .AdviserApprise {
+  .clickdoc {
+    text-decoration: underline;
+    &:hover {
+      cursor: pointer;
+      color: $fontblue;
+    }
+  }
   .el-table {
     .handle {
       .result {

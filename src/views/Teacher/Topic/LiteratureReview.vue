@@ -46,8 +46,8 @@
           width="240">
             <template slot-scope="scope">
               <div class="handle">
-                <el-button v-if='scope.row.wenxianIspass == 0' type="primary" plain class="deepbluebtn" @click="openDialog(scope.row)">评阅</el-button>
-                <el-button v-if='scope.row.wenxianIspass != 0' type="primary" plain class="deepbluebtn" @click="openDialog(scope.row)">修改</el-button>
+                <el-button v-if='!scope.row.wenxianIspass' type="primary" plain class="deepbluebtn" @click="openDialog(scope.row)">评阅</el-button>
+                <el-button v-if='scope.row.wenxianIspass' type="primary" plain class="deepbluebtn" @click="openDialog(scope.row)">修改</el-button>
               </div>
             </template>
           </el-table-column>
@@ -118,7 +118,7 @@ export default {
         studentid: null,
         score: null,
         suggest: null,
-        ispass: 1
+        ispass: null
       }
     }
   },
